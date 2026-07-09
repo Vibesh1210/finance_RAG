@@ -1,0 +1,35 @@
+name: gates
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: usrag
+          POSTGRES_PASSWORD: usrag
+          POSTGRES_DB: usrag
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U usrag -d usrag"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 12
+    env:
+      DATABASE_URL: postgresql://usrag:usrag@localhost:5432/usrag
+      # CI placeholder proves the config plumbing; the real UA lives in local .env only.
+      SEC_EDGAR_USER_AGENT: US-rag-CI (ci@users.noreply.github.com)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      # service containers can't mount db/init/, so CI provisions the same extension
+      # explicitly (DECISIONS.md #2); the gate itself remains a pure verifier.
+      - run: psql "$DATABASE_URL" -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+      - run: uv run python gates/run_all.py

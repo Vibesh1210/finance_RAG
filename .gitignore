@@ -1,0 +1,12 @@
+# local env & secrets — never committed
+.env
+
+# raw fetched artifacts (registered in DB, not in git)
+blobs/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/

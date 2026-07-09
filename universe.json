@@ -1,0 +1,83 @@
+[
+  {
+    "ticker": "AAPL",
+    "cik": "0000320193",
+    "name": "Apple Inc.",
+    "sector": "tech hardware",
+    "fye_month_hint": 9,
+    "week_52_53_calendar": true
+  },
+  {
+    "ticker": "CAT",
+    "cik": "0000018230",
+    "name": "CATERPILLAR INC",
+    "sector": "industrials",
+    "fye_month_hint": 12,
+    "week_52_53_calendar": false
+  },
+  {
+    "ticker": "COST",
+    "cik": "0000909832",
+    "name": "COSTCO WHOLESALE CORP /NEW",
+    "sector": "retail",
+    "fye_month_hint": 9,
+    "week_52_53_calendar": true
+  },
+  {
+    "ticker": "DE",
+    "cik": "0000315189",
+    "name": "DEERE & CO",
+    "sector": "industrials",
+    "fye_month_hint": 10,
+    "week_52_53_calendar": true
+  },
+  {
+    "ticker": "JNJ",
+    "cik": "0000200406",
+    "name": "JOHNSON & JOHNSON",
+    "sector": "healthcare",
+    "fye_month_hint": 12,
+    "week_52_53_calendar": true
+  },
+  {
+    "ticker": "JPM",
+    "cik": "0000019617",
+    "name": "JPMORGAN CHASE & CO",
+    "sector": "banking",
+    "fye_month_hint": 12,
+    "week_52_53_calendar": false
+  },
+  {
+    "ticker": "MSFT",
+    "cik": "0000789019",
+    "name": "MICROSOFT CORP",
+    "sector": "software/cloud",
+    "fye_month_hint": 6,
+    "week_52_53_calendar": false
+  },
+  {
+    "ticker": "NVDA",
+    "cik": "0001045810",
+    "name": "NVIDIA CORP",
+    "sector": "semiconductors",
+    "fye_month_hint": 1,
+    "week_52_53_calendar": true
+  },
+  {
+    "ticker": "WMT",
+    "cik": "0000104169",
+    "name": "Walmart Inc.",
+    "sector": "retail",
+    "fye_month_hint": 1,
+    "week_52_53_calendar": false
+  },
+  {
+    "ticker": "XOM",
+    "cik": "0000034088",
+    "name": "Exxon Mobil Corp (predecessor registrant)",
+    "sector": "energy",
+    "fye_month_hint": 12,
+    "week_52_53_calendar": false,
+    "cik_note": "successor ExxonMobil Holdings Corp (CIK 0002115436) took the XOM ticker 2026-07-01 via 8-K12B; corpus-window filings live under this CIK"
+  }
+]
