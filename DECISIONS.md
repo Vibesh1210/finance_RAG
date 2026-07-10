@@ -40,3 +40,15 @@ predecessor CIK with a `cik_note` in universe.json. Phase 2's backfill and the
 Phase 1 security master must treat ticker→CIK as point-in-time (design §4.3) —
 this event is the in-corpus proof of why. Revisit when ingesting anything the
 successor entity files.
+
+## 2026-07-11 — #5: "append-only" = write-once `superseded_by`, trigger-enforced
+
+U11 says facts are append-only, but the supersession *link* lives on the old row
+(`superseded_by`, per design §4.2 DDL) — setting it is technically an UPDATE.
+Interpretation pinned here: the `facts_append_only` trigger forbids DELETE always
+and permits exactly one mutation per row — setting `superseded_by` from NULL once,
+with every other column bit-identical. TRUNCATE bypasses row triggers, so the
+Phase 1 gate lints it out of `src/` instead (tests may use it; they run on a
+disposable DB). Consequence for Phase 2/U13: rows are inserted only *after* human
+verification (`human_verified=true` at insert) — there is no post-insert flag
+flip, because the trigger would forbid it.

@@ -1,4 +1,4 @@
-.PHONY: up down sync gate gates verify-live
+.PHONY: up down sync migrate seed test gate gates verify-live
 
 PHASE ?= 0
 PHASE_PADDED = $(shell printf '%02d' $(PHASE))
@@ -11,6 +11,15 @@ down:
 
 sync:
 	uv sync
+
+migrate:
+	uv run python -m us_rag.store.migrate
+
+seed:
+	uv run python -m us_rag.store.seed
+
+test:
+	uv run pytest -q
 
 gate:
 	uv run python gates/phase_$(PHASE_PADDED).py

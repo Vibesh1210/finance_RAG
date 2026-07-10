@@ -1,0 +1,40 @@
+{
+  "_provenance": "Hand-entered from filings 2026-07-10; [HUMAN] verification pending (~30 min). Phase 2 re-derives every row from XBRL contexts with source='xbrl'; a seed/XBRL mismatch is a Phase 2 gate failure — that cross-check is the real safety net.",
+  "_conventions": "FY label = calendar year containing the fiscal year end (design §4.6). weeks is NULL for month-based calendars (MSFT, WMT, CAT); 52/53 and 13/14 apply to week-based calendars (NVDA, AAPL, DE).",
+  "rows": [
+    { "ticker": "NVDA", "fiscal_year": 2024, "fiscal_period": "FY", "period_start": "2023-01-30", "period_end": "2024-01-28", "weeks": 52 },
+    { "ticker": "NVDA", "fiscal_year": 2025, "fiscal_period": "FY", "period_start": "2024-01-29", "period_end": "2025-01-26", "weeks": 52 },
+    { "ticker": "NVDA", "fiscal_year": 2025, "fiscal_period": "Q1", "period_start": "2024-01-29", "period_end": "2024-04-28", "weeks": 13 },
+    { "ticker": "NVDA", "fiscal_year": 2025, "fiscal_period": "Q2", "period_start": "2024-04-29", "period_end": "2024-07-28", "weeks": 13 },
+    { "ticker": "NVDA", "fiscal_year": 2025, "fiscal_period": "Q3", "period_start": "2024-07-29", "period_end": "2024-10-27", "weeks": 13 },
+    { "ticker": "NVDA", "fiscal_year": 2025, "fiscal_period": "Q4", "period_start": "2024-10-28", "period_end": "2025-01-26", "weeks": 13 },
+
+    { "ticker": "MSFT", "fiscal_year": 2025, "fiscal_period": "FY", "period_start": "2024-07-01", "period_end": "2025-06-30", "weeks": null },
+    { "ticker": "MSFT", "fiscal_year": 2025, "fiscal_period": "Q1", "period_start": "2024-07-01", "period_end": "2024-09-30", "weeks": null },
+    { "ticker": "MSFT", "fiscal_year": 2025, "fiscal_period": "Q2", "period_start": "2024-10-01", "period_end": "2024-12-31", "weeks": null },
+    { "ticker": "MSFT", "fiscal_year": 2025, "fiscal_period": "Q3", "period_start": "2025-01-01", "period_end": "2025-03-31", "weeks": null },
+    { "ticker": "MSFT", "fiscal_year": 2025, "fiscal_period": "Q4", "period_start": "2025-04-01", "period_end": "2025-06-30", "weeks": null },
+
+    { "ticker": "AAPL", "fiscal_year": 2024, "fiscal_period": "FY", "period_start": "2023-10-01", "period_end": "2024-09-28", "weeks": 52 },
+
+    { "ticker": "WMT", "fiscal_year": 2024, "fiscal_period": "FY", "period_start": "2023-02-01", "period_end": "2024-01-31", "weeks": null },
+    { "ticker": "WMT", "fiscal_year": 2025, "fiscal_period": "FY", "period_start": "2024-02-01", "period_end": "2025-01-31", "weeks": null },
+    { "ticker": "WMT", "fiscal_year": 2025, "fiscal_period": "Q1", "period_start": "2024-02-01", "period_end": "2024-04-30", "weeks": null },
+    { "ticker": "WMT", "fiscal_year": 2025, "fiscal_period": "Q2", "period_start": "2024-05-01", "period_end": "2024-07-31", "weeks": null },
+    { "ticker": "WMT", "fiscal_year": 2025, "fiscal_period": "Q3", "period_start": "2024-08-01", "period_end": "2024-10-31", "weeks": null },
+    { "ticker": "WMT", "fiscal_year": 2025, "fiscal_period": "Q4", "period_start": "2024-11-01", "period_end": "2025-01-31", "weeks": null },
+
+    { "ticker": "CAT", "fiscal_year": 2024, "fiscal_period": "FY", "period_start": "2024-01-01", "period_end": "2024-12-31", "weeks": null },
+    { "ticker": "CAT", "fiscal_year": 2024, "fiscal_period": "Q1", "period_start": "2024-01-01", "period_end": "2024-03-31", "weeks": null },
+    { "ticker": "CAT", "fiscal_year": 2024, "fiscal_period": "Q2", "period_start": "2024-04-01", "period_end": "2024-06-30", "weeks": null },
+    { "ticker": "CAT", "fiscal_year": 2024, "fiscal_period": "Q3", "period_start": "2024-07-01", "period_end": "2024-09-30", "weeks": null },
+    { "ticker": "CAT", "fiscal_year": 2024, "fiscal_period": "Q4", "period_start": "2024-10-01", "period_end": "2024-12-31", "weeks": null },
+
+    { "ticker": "DE", "fiscal_year": 2024, "fiscal_period": "FY", "period_start": "2023-10-30", "period_end": "2024-10-27", "weeks": 52 },
+    { "ticker": "DE", "fiscal_year": 2024, "fiscal_period": "Q1", "period_start": "2023-10-30", "period_end": "2024-01-28", "weeks": 13 },
+    { "ticker": "DE", "fiscal_year": 2024, "fiscal_period": "Q2", "period_start": "2024-01-29", "period_end": "2024-04-28", "weeks": 13 },
+    { "ticker": "DE", "fiscal_year": 2024, "fiscal_period": "Q3", "period_start": "2024-04-29", "period_end": "2024-07-28", "weeks": 13 },
+    { "ticker": "DE", "fiscal_year": 2024, "fiscal_period": "Q4", "period_start": "2024-07-29", "period_end": "2024-10-27", "weeks": 13 },
+    { "ticker": "DE", "fiscal_year": 2025, "fiscal_period": "FY", "period_start": "2024-10-28", "period_end": "2025-11-02", "weeks": 53 }
+  ]
+}
