@@ -41,6 +41,14 @@ Phase 1 security master must treat ticker→CIK as point-in-time (design §4.3) 
 this event is the in-corpus proof of why. Revisit when ingesting anything the
 successor entity files.
 
+## 2026-07-12 — #6: working mode — "I build, you consolidate" learning loop
+
+The project's goals are the product AND the human learning the domain, weighted
+equally. Agreed loop: plain-language brief (learn/phase_NN_brief.md) BEFORE each
+phase; plain walkthrough + one rebuild-it-yourself exercise (learn/phase_NN.md)
+AFTER its gate is green; learn/glossary.md defines every term; no unexplained
+jargon in learn/. Retroactive coverage for Phases 0–1 written 2026-07-12.
+
 ## 2026-07-11 — #5: "append-only" = write-once `superseded_by`, trigger-enforced
 
 U11 says facts are append-only, but the supersession *link* lives on the old row

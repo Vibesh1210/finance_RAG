@@ -16,3 +16,10 @@ to the gate; `make gate PHASE=N`; all previous gates stay green (`make gates`);
 deviations go in DECISIONS.md; [HUMAN] tasks are for the human — stop and ask.
 
 Per-phase writeups (what was built and why, code + theory) live in phases_docs/.
+
+Learning loop (DECISIONS.md #6 — the user is learning this domain; equal goal):
+- BEFORE building phase N: write learn/phase_NN_brief.md — the concept in plain
+  language, zero unexplained jargon (glossary: learn/glossary.md).
+- AFTER the gate is green: write learn/phase_NN.md — plain walkthrough + ONE
+  small rebuild-it-yourself exercise (self-checking where possible).
+- Answer any "what does X mean" question at any depth, without jargon.
