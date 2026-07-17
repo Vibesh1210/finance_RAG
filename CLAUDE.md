@@ -1,5 +1,14 @@
 # US Equity Financial RAG
 
+Start every session by reading STATUS.md (global state: target, phases, current,
+done, blockers) and CURRENT_PHASE.md (theory-to-code deep dive of the active
+phase). Maintain both (DECISIONS.md #7): update STATUS.md at every phase
+transition and whenever blockers or notable progress change; when a phase's gate
+goes green, archive CURRENT_PHASE.md to learn/phase_NN_brief.md and rewrite it
+for the next phase BEFORE building. CURRENT_PHASE.md follows the learning rules
+below — plain language, theory → code, complete pipeline flow, no unexplained
+jargon.
+
 Architecture authority: docs/execution_plan_us.md (build order) > docs/design_us.md (design).
 This project is self-contained — no external documents are required. The sibling
 india_rag/ project is independent; its docs are never an authority here.

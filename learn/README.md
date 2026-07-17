@@ -7,9 +7,13 @@ working system, and you being able to explain and rebuild its core ideas.
 
 For every phase from here on:
 
-1. **Before building** — `learn/phase_NN_brief.md`: the concept in plain words.
-   What problem this phase solves, why it matters, what choices we have. No
-   unexplained jargon, ever. You read this BEFORE any code exists.
+1. **Before building** — the deep dive: the concept in plain words, theory
+   down to code level, the complete flow. What problem this phase solves, why
+   it matters, what choices we have. No unexplained jargon, ever. You read
+   this BEFORE any code exists. While a phase is active it lives at the repo
+   root as `CURRENT_PHASE.md` (next to `STATUS.md`, the global state file);
+   when the gate goes green it's archived here as `learn/phase_NN_brief.md`
+   (DECISIONS.md #7).
 2. **Build** — Claude builds at full speed (technical writeup goes to
    `phases_docs/phase_NN.md` as before).
 3. **After the gate is green** — `learn/phase_NN.md`: a plain-language

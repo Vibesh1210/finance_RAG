@@ -49,6 +49,18 @@ phase; plain walkthrough + one rebuild-it-yourself exercise (learn/phase_NN.md)
 AFTER its gate is green; learn/glossary.md defines every term; no unexplained
 jargon in learn/. Retroactive coverage for Phases 0–1 written 2026-07-12.
 
+## 2026-07-17 — #7: STATUS.md + CURRENT_PHASE.md as maintained entry points
+
+Two root files are maintained from now on (extends #6). **STATUS.md** — the
+global state file: project target, phase map, current phase, done/blocked —
+the first read for any AI or human picking up the repo; updated at phase
+transitions and whenever blockers change. **CURRENT_PHASE.md** — the active
+phase's pre-build deep dive (theory → code, complete pipeline flow, learning-
+first plain language). It supersedes the thin `learn/phase_NN_brief.md` format
+at greater depth: written BEFORE building each phase; on gate-green it is
+archived as `learn/phase_NN_brief.md` and rewritten for the next phase.
+Neither file is a design authority — execution plan and design doc still win.
+
 ## 2026-07-11 — #5: "append-only" = write-once `superseded_by`, trigger-enforced
 
 U11 says facts are append-only, but the supersession *link* lives on the old row
