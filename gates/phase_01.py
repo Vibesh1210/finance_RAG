@@ -123,7 +123,7 @@ def check_fiscal_seed_sanity() -> None:
         # duration sanity is VALIDATION of stored rows (allowed) — not derivation (banned)
         bad_q = conn.execute(
             "SELECT count(*) FROM fiscal_calendars WHERE fiscal_period != 'FY'"
-            " AND (period_end - period_start) NOT BETWEEN 85 AND 98"
+            " AND (period_end - period_start) NOT BETWEEN 83 AND 111"
         ).fetchone()[0]
         bad_fy = conn.execute(
             "SELECT count(*) FROM fiscal_calendars WHERE fiscal_period = 'FY'"

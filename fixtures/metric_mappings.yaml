@@ -1,0 +1,33 @@
+# Metric registry (design §6.2) — the reviewed metric -> us-gaap-tag map.
+#
+# [HUMAN] review step (~45 min): confirm each metric points at the right tag, and that
+# the JPMorgan abstentions (us_gaap_tag: null) are correct — banks have no gross profit
+# or cost of revenue, so those MUST abstain, never compute.
+#
+# `company: null` (or omitted) = the default; a company row overrides the default.
+# Tags below were drawn from the actual loaded facts (coverage-checked 2026-08-03).
+# `us_gaap_tag: null` = explicit typed abstention. valid_from omitted = always valid.
+
+# ---- revenue (default Revenues; three issuers tag it differently; JPM not comparable) ----
+- {metric_key: revenue, us_gaap_tag: Revenues, unit: USD, comparable: true, provenance: "us-gaap:Revenues", verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: revenue, company: AAPL, us_gaap_tag: RevenueFromContractWithCustomerExcludingAssessedTax, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: revenue, company: MSFT, us_gaap_tag: RevenueFromContractWithCustomerExcludingAssessedTax, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: revenue, company: JNJ, us_gaap_tag: RevenueFromContractWithCustomerExcludingAssessedTax, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: revenue, company: JPM, us_gaap_tag: Revenues, unit: USD, comparable: false, provenance: "JPM total net revenue (bank) — not comparable to an industrial 'revenue'; answer must caveat", verified_by: "phase4-auto; [HUMAN] pending"}
+
+# ---- flow metrics (income statement) ----
+- {metric_key: net_income, us_gaap_tag: NetIncomeLoss, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: diluted_eps, us_gaap_tag: EarningsPerShareDiluted, unit: USD/shares, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: operating_income, us_gaap_tag: OperatingIncomeLoss, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: gross_profit, us_gaap_tag: GrossProfit, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: gross_profit, company: JPM, us_gaap_tag: null, unit: USD, comparable: false, provenance: "banks have no gross profit — abstain, never compute", verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: cost_of_revenue, us_gaap_tag: CostOfGoodsAndServicesSold, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: cost_of_revenue, company: JPM, us_gaap_tag: null, unit: USD, comparable: false, provenance: "banks have no cost of revenue — abstain", verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: operating_cash_flow, us_gaap_tag: NetCashProvidedByUsedInOperatingActivities, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: capital_expenditure, us_gaap_tag: PaymentsToAcquirePropertyPlantAndEquipment, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+
+# ---- instant metrics (balance sheet; period_end value) ----
+- {metric_key: total_assets, us_gaap_tag: Assets, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: total_liabilities, us_gaap_tag: Liabilities, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: stockholders_equity, us_gaap_tag: StockholdersEquity, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}
+- {metric_key: cash_and_equivalents, us_gaap_tag: CashAndCashEquivalentsAtCarryingValue, unit: USD, comparable: true, verified_by: "phase4-auto; [HUMAN] pending"}

@@ -1,0 +1,294 @@
+# Factual golden bank v0 — 40 questions (execution plan Phase 3 distribution).
+#
+# DRAFT for [HUMAN] verification. Retrieval-scored questions carry gold PASSAGES
+# (accession + section) — the proposed source of the answer, pulled from the real
+# corpus; confirm each is the right passage. Behavioural questions (graph, unanswerable,
+# clarify) carry NO gold: they test that the system refuses / asks, not what it finds.
+#
+# Retrieval metrics (recall@10, MRR, nDCG@10) score only the gold-bearing questions
+# (26 of 40); the 14 behavioural ones are checked separately (later phases).
+
+# ---- 8 × point-in-time (as-of enforced; the look-ahead gate checks no future leak) ----
+
+- id: F01
+  question: As of late April 2024, what quarterly revenue had Caterpillar reported for the first quarter of 2024?
+  category: point_in_time
+  as_of: 2024-04-28   # inside the window: 8-K filed 2024-04-25, 10-Q not until 2024-05-01
+  company: CAT
+  gold: [{accession: "0000018230-24-000016", section: "EX-99.1"}]
+
+- id: F02
+  question: As of November 1, 2024, what third-quarter revenue had Caterpillar announced?
+  category: point_in_time
+  as_of: 2024-11-01   # window: 8-K 2024-10-30, 10-Q 2024-11-06
+  company: CAT
+  gold: [{accession: "0000018230-24-000050", section: "EX-99.1"}]
+
+- id: F03
+  question: As of October 1, 2024, what full-year net sales had Costco announced for fiscal 2024?
+  category: point_in_time
+  as_of: 2024-10-01   # window: 8-K 2024-09-26, 10-K 2024-10-08
+  company: COST
+  gold: [{accession: "0000909832-24-000043", section: "EX-99.1"}]
+
+- id: F04
+  question: As of February 5, 2025, what fourth-quarter 2024 revenue had Caterpillar reported?
+  category: point_in_time
+  as_of: 2025-02-05   # window: 8-K 2025-01-30, 10-K 2025-02-14
+  company: CAT
+  gold: [{accession: "0000018230-25-000004", section: "EX-99.1"}]
+
+- id: F05
+  question: As of November 1, 2025, what third-quarter revenue had Caterpillar announced for 2025?
+  category: point_in_time
+  as_of: 2025-11-01   # window: 8-K 2025-10-29, 10-Q 2025-11-03
+  company: CAT
+  gold: [{accession: "0000018230-25-000043", section: "EX-99.1"}]
+
+- id: F06
+  question: How did Johnson & Johnson account for the separation of its consumer-health business (Kenvue), and how did it affect the comparative revenue figures?
+  category: point_in_time   # supersession/recast: as-known-now view
+  as_of: 2026-03-01
+  company: JNJ
+  gold: [{accession: "0000200406-25-000038", section: "Item 7"}]
+
+- id: F07
+  question: How did NVIDIA's ten-for-one stock split affect its reported per-share amounts?
+  category: point_in_time   # split straddle, as-known-now
+  as_of: 2026-03-01
+  company: NVDA
+  gold: [{accession: "0001045810-25-000023", section: "Item 7"}]
+
+- id: F08
+  question: As of May 2024, what did NVIDIA's most recent annual report say about its business and share count, before the ten-for-one split took effect?
+  category: point_in_time   # split straddle, as-reported-then (pre-split filing only)
+  as_of: 2024-05-01   # only the FY2024 10-K (filed 2024-02-21) is public
+  company: NVDA
+  gold: [{accession: "0001045810-24-000029", section: "Item 7"}]
+
+# ---- 8 × segment (the segment discussion lives in MD&A / Item 7) ----
+
+- id: F09
+  question: What did NVIDIA report for its Data Center segment revenue in fiscal 2025?
+  category: segment
+  as_of: 2026-03-01
+  company: NVDA
+  gold: [{accession: "0001045810-25-000023", section: "Item 7"}]
+
+- id: F10
+  question: How did Apple's Services revenue compare to its Products revenue in fiscal 2025?
+  category: segment
+  as_of: 2026-03-01
+  company: AAPL
+  gold: [{accession: "0000320193-25-000079", section: "Item 7"}]
+
+- id: F11
+  question: What was Microsoft's Intelligent Cloud segment revenue in fiscal 2025?
+  category: segment
+  as_of: 2026-03-01
+  company: MSFT
+  gold: [{accession: "0000950170-25-100235", section: "Item 7"}]
+
+- id: F12
+  question: How much membership fee income did Costco report in fiscal 2025?
+  category: segment
+  as_of: 2026-03-01
+  company: COST
+  gold: [{accession: "0000909832-25-000101", section: "Item 7"}]
+
+- id: F13
+  question: How did Caterpillar's Construction Industries segment perform in fiscal 2025?
+  category: segment
+  as_of: 2026-03-01
+  company: CAT
+  gold: [{accession: "0000018230-26-000008", section: "Item 7"}]
+
+- id: F14
+  question: What did Deere report for its Production and Precision Agriculture segment in fiscal 2025?
+  category: segment
+  as_of: 2026-03-01
+  company: DE
+  gold: [{accession: "0001104659-25-122321", section: "Item 7"}]
+
+- id: F15
+  question: How did JPMorgan's Consumer & Community Banking segment perform in fiscal 2025?
+  category: segment
+  as_of: 2026-03-01
+  company: JPM
+  gold: [{accession: "0001628280-26-008131", section: "Item 7"}]
+
+- id: F16
+  question: How did Walmart U.S. compare to Walmart International by net sales in fiscal 2025?
+  category: segment
+  as_of: 2026-03-01
+  company: WMT
+  gold: [{accession: "0000104169-25-000021", section: "Item 7"}]
+
+# ---- 6 × cross-company (4 comparable + 2 degradation cases) ----
+
+- id: F17
+  question: Compare Apple's and Microsoft's total revenue for fiscal year 2025.
+  category: cross_company
+  as_of: 2026-03-01
+  gold:
+    - {accession: "0000320193-25-000079", section: "Item 7"}
+    - {accession: "0000950170-25-100235", section: "Item 7"}
+
+- id: F18
+  question: Compare Walmart's and Costco's total revenue for fiscal year 2025.
+  category: cross_company
+  as_of: 2026-03-01
+  gold:
+    - {accession: "0000104169-25-000021", section: "Item 7"}
+    - {accession: "0000909832-25-000101", section: "Item 7"}
+
+- id: F19
+  question: Compare Caterpillar's and Deere's revenue for fiscal year 2025.
+  category: cross_company
+  as_of: 2026-03-01
+  gold:
+    - {accession: "0000018230-26-000008", section: "Item 7"}
+    - {accession: "0001104659-25-122321", section: "Item 7"}
+
+- id: F20
+  question: How do NVIDIA and Microsoft each describe their exposure to AI and cloud demand in fiscal 2025?
+  category: cross_company
+  as_of: 2026-03-01
+  gold:
+    - {accession: "0001045810-25-000023", section: "Item 7"}
+    - {accession: "0000950170-25-100235", section: "Item 7"}
+
+- id: F21
+  question: Compare JPMorgan's gross margin to Apple's for fiscal 2025.
+  category: cross_company   # deliberately non-comparable: a bank has no gross margin
+  as_of: 2026-03-01
+  expected: clarify   # must flag non-comparability, not fabricate a JPM gross margin
+
+- id: F22
+  question: Compare ExxonMobil's revenue to Chevron's for fiscal 2024.
+  category: cross_company   # Chevron is out of the 10-company universe
+  as_of: 2026-03-01
+  expected: clarify   # can address XOM, must flag Chevron as out of coverage
+
+# ---- 6 × narrative (risk factors, MD&A) ----
+
+- id: F23
+  question: What risks did Apple disclose about its supply chain and manufacturing concentration?
+  category: narrative
+  as_of: 2026-03-01
+  company: AAPL
+  gold: [{accession: "0000320193-25-000079", section: "Item 1A"}]
+
+- id: F24
+  question: What did NVIDIA say about competition and export-control risks?
+  category: narrative
+  as_of: 2026-03-01
+  company: NVDA
+  gold: [{accession: "0001045810-25-000023", section: "Item 1A"}]
+
+- id: F25
+  question: What climate-related and regulatory risks did ExxonMobil disclose?
+  category: narrative
+  as_of: 2026-03-01
+  company: XOM
+  gold: [{accession: "0000034088-25-000010", section: "Item 1A"}]
+
+- id: F26
+  question: What did Walmart's management say about gross margin and comparable sales trends?
+  category: narrative
+  as_of: 2026-03-01
+  company: WMT
+  gold: [{accession: "0000104169-25-000021", section: "Item 7"}]
+
+- id: F27
+  question: What did Costco's management discussion say about membership renewal and fee trends?
+  category: narrative
+  as_of: 2026-03-01
+  company: COST
+  gold: [{accession: "0000909832-25-000101", section: "Item 7"}]
+
+- id: F28
+  question: What risks did Microsoft disclose related to artificial intelligence?
+  category: narrative
+  as_of: 2026-03-01
+  company: MSFT
+  gold: [{accession: "0000950170-25-100235", section: "Item 1A"}]
+
+# ---- 4 × graph (unanswerable until M2 — expect a typed refusal, not a guess) ----
+
+- id: F29
+  question: Which of Walmart's suppliers also supply Costco?
+  category: graph
+  as_of: 2026-03-01
+  expected: typed_refusal
+
+- id: F30
+  question: How is Caterpillar exposed to the same component suppliers as Deere?
+  category: graph
+  as_of: 2026-03-01
+  expected: typed_refusal
+
+- id: F31
+  question: What is NVIDIA's revenue concentration among its largest hyperscaler customers?
+  category: graph
+  as_of: 2026-03-01
+  expected: typed_refusal
+
+- id: F32
+  question: Trace the supply-chain relationship between Apple and its key component vendors.
+  category: graph
+  as_of: 2026-03-01
+  expected: typed_refusal
+
+# ---- 6 × unanswerable-by-design (expect abstention) ----
+
+- id: F33
+  question: What is Apple's CUSIP number?
+  category: unanswerable   # U7: identifiers like CUSIP are not stored
+  as_of: 2026-03-01
+  expected: abstain
+
+- id: F34
+  question: What was NVIDIA's stock price at 2 p.m. yesterday?
+  category: unanswerable   # intraday prices are out of scope (EOD only, and not loaded)
+  as_of: 2026-03-01
+  expected: abstain
+
+- id: F35
+  question: What is the current analyst price target for Microsoft?
+  category: unanswerable   # analyst targets are not in the corpus
+  as_of: 2026-03-01
+  expected: abstain
+
+- id: F36
+  question: What did Apple's CEO say during the analyst Q&A on the last earnings call?
+  category: unanswerable   # U5 cut: earnings-call Q&A transcripts are not ingested
+  as_of: 2026-03-01
+  expected: abstain
+
+- id: F37
+  question: What was Apple's revenue specifically in Germany in fiscal 2025?
+  category: unanswerable   # U10 cut: geographic sub-segment detail is not modeled
+  as_of: 2026-03-01
+  expected: abstain
+
+- id: F38
+  question: What was Tesla's revenue for fiscal year 2025?
+  category: unanswerable   # out of the 10-company universe
+  as_of: 2026-03-01
+  expected: abstain
+
+# ---- 2 × fiscal traps requiring clarification (behavioural) ----
+
+- id: F39
+  question: What was Apple's Q3 2024 revenue?
+  category: fiscal_trap   # "Q3 2024": Apple's fiscal Q3 2024 (ended Jun 2024) vs calendar Q3 2024
+  as_of: 2026-03-01
+  company: AAPL
+  expected: clarify
+
+- id: F40
+  question: Compare NVIDIA's and Apple's third-quarter revenue.
+  category: fiscal_trap   # quarter-misalignment: NVDA Q3 ends late Oct, AAPL Q3 ends late Jun
+  as_of: 2026-03-01
+  expected: clarify

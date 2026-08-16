@@ -1,0 +1,47 @@
+{
+  "_provenance": "boundaries hand-checked 2026-07-17 on AAPL/MSFT/NVDA latest 10-Ks; thresholds are half the observed sizes (drift alarms, not exact pins \u2014 reruns may chunk slightly differently)",
+  "checks": [
+    {
+      "accession": "0000320193-25-000079",
+      "section": "Item 1A",
+      "min_chunks": 18,
+      "min_chars": 53280,
+      "opening_prefix": "The following summarizes factors that could have a material"
+    },
+    {
+      "accession": "0000320193-25-000079",
+      "section": "Item 7",
+      "min_chunks": 4,
+      "min_chars": 10929,
+      "opening_prefix": null
+    },
+    {
+      "accession": "0000950170-25-100235",
+      "section": "Item 1A",
+      "min_chunks": 20,
+      "min_chars": 62024,
+      "opening_prefix": null
+    },
+    {
+      "accession": "0000950170-25-100235",
+      "section": "Item 7",
+      "min_chunks": 10,
+      "min_chars": 30918,
+      "opening_prefix": null
+    },
+    {
+      "accession": "0001045810-25-000023",
+      "section": "Item 1A",
+      "min_chunks": 33,
+      "min_chars": 95402,
+      "opening_prefix": null
+    },
+    {
+      "accession": "0001045810-25-000023",
+      "section": "Item 7",
+      "min_chunks": 9,
+      "min_chars": 24962,
+      "opening_prefix": null
+    }
+  ]
+}

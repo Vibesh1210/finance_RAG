@@ -1,0 +1,10 @@
+# Recorded retrieval baselines — ratchet UP only (execution plan Phase 3).
+#
+# Populated on the first full golden-bank run once the bank is frozen. A later run
+# scoring below any recorded number fails the Phase 3 gate. Empty until the bank exists.
+#
+# Shape once populated:
+#   fused:  {recall_at_10: 0.NN, mrr: 0.NN, ndcg_at_10: 0.NN}
+#   dense:  {recall_at_10: 0.NN, mrr: 0.NN, ndcg_at_10: 0.NN}
+#   sparse: {recall_at_10: 0.NN, mrr: 0.NN, ndcg_at_10: 0.NN}
+{}

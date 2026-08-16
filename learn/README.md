@@ -33,7 +33,11 @@ you if you're right, the same way the gates tell the build if it's right.
 | `glossary.md` | Every term the project uses, in plain words, with examples from our own repo |
 | `phase_00.md` | What Phase 0 built and why + a break-it-on-purpose exercise |
 | `phase_01.md` | What Phase 1 built (the heart of the system) + the as-of exercise |
-| `exercises/` | Runnable exercise files |
+| `phase_02.md` | Ingestion — one filing → numbers + prose; the chunk-packer exercise |
+| `phase_03.md` | The ruler (golden bank) + hybrid search; the RRF-by-hand exercise |
+| `phase_04.md` | The exact-numbers engine; the metric-resolver exercise |
+| `phase_05.md` | The conductor (router → generate → verify) = M0; the verifier exercise |
+| `exercises/` | Runnable, self-checking exercise files (one per phase) |
 
 ## The syllabus — what each phase teaches you
 
@@ -44,10 +48,10 @@ Done ✅ / upcoming ⏳.
 |---|---|---|
 | 0 ✅ | Gates as robot checklists, fixtures & reproducibility, why derived files test themselves | Break the repo on purpose, watch the gate catch you |
 | 1 ✅ | **Bitemporal time** (what did we know, when), append-only history, fail-closed parsing, fiscal calendars, slippery identity | Implement the as-of rule yourself in pure Python |
-| 2 ⏳ | Anatomy of SEC filings (10-K/10-Q/8-K), XBRL (machine-readable numbers), polite scraping (rate limits, fair access), idempotent pipelines, real supersessions (JNJ), stock-split adjustment | Fetch and dissect one real filing by hand; find one number in the raw XBRL |
-| 3 ⏳ | Why you write the exam before studying (golden questions), embeddings, keyword vs meaning search, hybrid merging (RRF), recall metrics, the look-ahead trap in retrieval | Write 5 golden questions yourself; hand-score one retrieval run |
-| 4 ⏳ | Why "revenue" is ambiguous (metric mapping), SQL templates vs letting an LLM write SQL, deriving Q4 when nobody reports it, the no-LLM-arithmetic rule | Map one metric across 3 companies by reading their XBRL tags |
-| 5 ⏳ | Routing questions to the right tool, generation with citations, verification (every number must match a record), knowing when to refuse | Trace one question end-to-end on paper before running it |
+| 2 ✅ | Anatomy of SEC filings, one parse → numbers + prose, polite scraping (rate limits, fair access), idempotent pipelines, heading-aware chunking, the 8 GB embedding-memory bug | Implement the heading-aware chunk packer in pure Python |
+| 3 ✅ | Why you write the exam before studying (golden questions), keyword vs meaning search, hybrid merging (RRF), recall metrics, the look-ahead trap in retrieval | Implement Reciprocal Rank Fusion by hand |
+| 4 ✅ | Why "revenue" is ambiguous (metric mapping), SQL templates vs letting an LLM write SQL, deriving Q4 when nobody reports it, the no-LLM-arithmetic rule | Implement the metric resolver (company override + abstain) |
+| 5 ✅ | Routing questions to the right tool, generation with citations, verification (every number must match a record), knowing when to refuse | Implement the verifier's core (exact-match + abstention guard) |
 | 6 ⏳ | What an API is, tracing/observability (debugging from logs alone), counting cost per query, caches and why invalidation is hard | Read one trace file and reconstruct what the system did |
 | 7 ⏳ | Ingesting messy news feeds, deduplication, recency vs relevance | Add one RSS source end to end |
 | 8 ⏳ | Rerankers (slow-but-smart second pass), conversation state, surfacing conflicting numbers honestly | Score 10 chunk rankings by hand, compare with the reranker |

@@ -1,0 +1,18 @@
+{
+  "_provenance": "gate 9's frozen case. Confirmed 2026-07-17 against the filings: JNJ H1-2023 revenue as reported in the Q2-2023 10-Q vs the Kenvue-recast comparative in the Q2-2024 10-Q (consumer health moved to discontinued operations). [HUMAN]: countersign during spot-checks.",
+  "human_countersigned": false,
+  "ticker": "JNJ",
+  "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+  "period_start": "2023-01-02",
+  "period_end": "2023-07-02",
+  "original": {
+    "value": "50276000000",
+    "accession": "0000200406-23-000082",
+    "knowledge_time": "2023-07-31T20:06:04+00:00"
+  },
+  "superseding": {
+    "value": "42413000000",
+    "accession": "0000200406-24-000075",
+    "knowledge_time": "2024-07-25T20:02:29+00:00"
+  }
+}

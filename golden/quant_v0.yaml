@@ -1,0 +1,190 @@
+# Quant golden bank v0 — 20 questions scored by EXACT-MATCH on the number (design §9).
+#
+# DRAFT for [HUMAN] verification. Values + provenance were pulled from the loaded facts;
+# each must be confirmed against the actual filing (accession) before this bank is frozen.
+# Per DECISIONS #12 these gold values are PROVISIONAL until the Phase 2 spot-checks land —
+# a "correct number" is only as trustworthy as the data it is checked against.
+#
+# as_of = 2026-03-01: every FY2024 and FY2025 10-K is public by then, so the answers are
+# knowable. Values are integers in base units (USD) or per-share (USD/shares).
+
+# ---- 12 × direct metric (all 10 companies; JPM expects the caveated bank mapping) ----
+
+- id: Q01
+  question: What was Apple's total net sales for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: AAPL
+  gold_value: "416161000000"
+  unit: USD
+  provenance: {accession: "0000320193-25-000079", concept: RevenueFromContractWithCustomerExcludingAssessedTax, period_end: "2025-09-27"}
+
+- id: Q02
+  question: What were Caterpillar's total revenues for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: CAT
+  gold_value: "67589000000"
+  unit: USD
+  provenance: {accession: "0000018230-26-000008", concept: Revenues, period_end: "2025-12-31"}
+
+- id: Q03
+  question: What were Costco's total revenues for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: COST
+  gold_value: "275235000000"
+  unit: USD
+  provenance: {accession: "0000909832-25-000101", concept: RevenueFromContractWithCustomerExcludingAssessedTax, period_end: "2025-08-31"}
+
+- id: Q04
+  question: What were Deere's total net sales and revenues for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: DE
+  gold_value: "45684000000"
+  unit: USD
+  provenance: {accession: "0001104659-25-122321", concept: Revenues, period_end: "2025-11-02"}
+
+- id: Q05
+  question: What was Johnson & Johnson's total revenue (sales to customers) for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: JNJ
+  gold_value: "94193000000"
+  unit: USD
+  provenance: {accession: "0000200406-26-000016", concept: RevenueFromContractWithCustomerExcludingAssessedTax, period_end: "2025-12-28"}
+
+- id: Q06
+  question: What was JPMorgan Chase's total net revenue for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: JPM
+  expected: answer   # [HUMAN] confirm the bank mapping: JPM 'total net revenue' (comparable=false, no gross-margin analogue); see execution plan JPM caveat
+  gold_value: "182447000000"
+  unit: USD
+  provenance: {accession: "0001628280-26-008131", concept: Revenues, period_end: "2025-12-31"}
+
+- id: Q07
+  question: What was Microsoft's total revenue for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: MSFT
+  gold_value: "281724000000"
+  unit: USD
+  provenance: {accession: "0000950170-25-100235", concept: RevenueFromContractWithCustomerExcludingAssessedTax, period_end: "2025-06-30"}
+
+- id: Q08
+  question: What was NVIDIA's total revenue for the fiscal year ended January 26, 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: NVDA
+  gold_value: "130497000000"
+  unit: USD
+  provenance: {accession: "0001045810-25-000023", concept: Revenues, period_end: "2025-01-26"}
+
+- id: Q09
+  question: What were Walmart's total revenues for the fiscal year ended January 31, 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: WMT
+  gold_value: "680985000000"
+  unit: USD
+  provenance: {accession: "0000104169-25-000021", concept: Revenues, period_end: "2025-01-31"}
+
+- id: Q10
+  question: What was ExxonMobil's net income attributable to the company for fiscal year 2024?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: XOM
+  gold_value: "33680000000"
+  unit: USD
+  provenance: {accession: "0000034088-25-000010", concept: NetIncomeLoss, period_end: "2024-12-31"}
+
+- id: Q11
+  question: What was Apple's net income for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: AAPL
+  gold_value: "112010000000"
+  unit: USD
+  provenance: {accession: "0000320193-25-000079", concept: NetIncomeLoss, period_end: "2025-09-27"}
+
+- id: Q12
+  question: What was Microsoft's diluted earnings per share for fiscal year 2025?
+  category: direct_metric
+  as_of: 2026-03-01
+  company: MSFT
+  gold_value: "13.64"
+  unit: USD/shares
+  provenance: {accession: "0000950170-25-100235", concept: EarningsPerShareDiluted, period_end: "2025-06-30"}
+
+# ---- 8 × fiscal traps ----
+
+- id: Q13
+  question: What was NVIDIA's revenue in fiscal 2025?
+  category: fiscal_trap   # FY-label collision: NVDA FY2025 ended Jan 26 2025, not calendar 2025
+  as_of: 2026-03-01
+  company: NVDA
+  gold_value: "130497000000"
+  unit: USD
+  provenance: {accession: "0001045810-25-000023", concept: Revenues, period_end: "2025-01-26"}
+
+- id: Q14
+  question: What was Walmart's revenue in fiscal 2025?
+  category: fiscal_trap   # FY-label collision: WMT FY2025 ended Jan 31 2025
+  as_of: 2026-03-01
+  company: WMT
+  gold_value: "680985000000"
+  unit: USD
+  provenance: {accession: "0000104169-25-000021", concept: Revenues, period_end: "2025-01-31"}
+
+- id: Q15
+  question: What was Microsoft's revenue for fiscal 2024?
+  category: fiscal_trap   # mid-year FYE: MSFT FY2024 ended June 30 2024
+  as_of: 2026-03-01
+  company: MSFT
+  gold_value: "245122000000"
+  unit: USD
+  provenance: {accession: "0000950170-24-087843", concept: RevenueFromContractWithCustomerExcludingAssessedTax, period_end: "2024-06-30"}
+
+- id: Q16
+  question: What was Deere's revenue in its 53-week fiscal year 2025?
+  category: fiscal_trap   # 53-week year: DE FY2025 ended Nov 2 2025
+  as_of: 2026-03-01
+  company: DE
+  gold_value: "45684000000"
+  unit: USD
+  provenance: {accession: "0001104659-25-122321", concept: Revenues, period_end: "2025-11-02"}
+
+- id: Q17
+  question: What was NVIDIA's revenue in 2024?
+  category: fiscal_trap   # bare calendar year: ambiguous — calendar 2024 straddles NVDA FY2024/FY2025
+  as_of: 2026-03-01
+  company: NVDA
+  expected: clarify   # no single answer: must ask FY2024 (ended Jan 2024) vs FY2025 (ended Jan 2025) vs calendar-2024
+
+- id: Q18
+  question: What was Walmart's revenue?
+  category: fiscal_trap   # basis ambiguity: total revenues (680,985M) vs net sales (674,538M), and which FY
+  as_of: 2026-03-01
+  company: WMT
+  expected: clarify   # must clarify total revenue vs net sales, and the fiscal year
+
+- id: Q19
+  question: What did Caterpillar report as its fourth-quarter 2024 revenue?
+  category: fiscal_trap   # standalone Q4: not directly XBRL-tagged — from the 8-K preliminary or FY − (Q1..Q3)
+  as_of: 2026-03-01
+  company: CAT
+  gold_value: "16200000000"
+  unit: USD
+  provenance: {accession: "0000018230-25-000004", concept: Revenues, period_end: "2024-12-31", note: "8-K EX-99 preliminary; verify against the release / Q4 derivation"}
+
+- id: Q20
+  question: What was Costco's net income for fiscal 2024?
+  category: fiscal_trap   # COST fiscal year ended Sep 1 2024 — not calendar 2024
+  as_of: 2026-03-01
+  company: COST
+  gold_value: "7367000000"
+  unit: USD
+  provenance: {accession: "0000909832-24-000049", concept: NetIncomeLoss, period_end: "2024-09-01"}

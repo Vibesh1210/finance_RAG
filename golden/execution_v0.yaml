@@ -1,0 +1,44 @@
+# execution_v0 — 25 SQL-path questions with EXACT expected results (execution plan Phase 4).
+#
+# DRAFT for [HUMAN] verification (~45 min). Values are real filing figures (drawn from the
+# loaded facts); confirm against the filings before freezing. Provisional until the Phase 2
+# spot-checks land (DECISIONS #12) — the same gold-answer independence rule. The Phase 4
+# gate runs each `template` through the read-only executor and requires an exact match
+# (deterministic path — no tolerance). `expect.abstain` = the executor must decline.
+
+# ---- metric_value: direct metrics + fiscal traps (FY2025 as of 2026-03-01) ----
+- {id: E01, template: metric_value, ticker: AAPL, metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "416161000000", accession: "0000320193-25-000079"}}
+- {id: E02, template: metric_value, ticker: NVDA, metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "130497000000", accession: "0001045810-25-000023"}}
+- {id: E03, template: metric_value, ticker: WMT,  metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "680985000000", accession: "0000104169-25-000021"}}
+- {id: E04, template: metric_value, ticker: MSFT, metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "281724000000", accession: "0000950170-25-100235"}}
+- {id: E05, template: metric_value, ticker: COST, metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "275235000000", accession: "0000909832-25-000101"}}
+- {id: E06, template: metric_value, ticker: DE,   metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "45684000000",  accession: "0001104659-25-122321"}}
+- {id: E07, template: metric_value, ticker: JNJ,  metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "94193000000",  accession: "0000200406-26-000016"}}
+- {id: E08, template: metric_value, ticker: CAT,  metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "67589000000",  accession: "0000018230-26-000008"}}
+- {id: E09, template: metric_value, ticker: JPM,  metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {value: "182447000000", accession: "0001628280-26-008131", comparable: false}}
+- {id: E10, template: metric_value, ticker: AAPL, metric: net_income, period: FY2025, as_of: 2026-03-01, expect: {value: "112010000000", accession: "0000320193-25-000079"}}
+- {id: E11, template: metric_value, ticker: MSFT, metric: diluted_eps, period: FY2025, as_of: 2026-03-01, expect: {value: "13.64", accession: "0000950170-25-100235"}}
+- {id: E12, template: metric_value, ticker: MSFT, metric: revenue, period: FY2024, as_of: 2026-03-01, expect: {value: "245122000000"}}  # mid-year FYE trap; comparative citation varies
+
+# ---- JPM abstentions (banks: no gross profit / cost of revenue / gross margin) ----
+- {id: E13, template: metric_value, ticker: JPM, metric: gross_profit,   period: FY2025, as_of: 2026-03-01, expect: {abstain: no_comparable_mapping}}
+- {id: E14, template: metric_value, ticker: JPM, metric: cost_of_revenue, period: FY2025, as_of: 2026-03-01, expect: {abstain: no_comparable_mapping}}
+- {id: E15, template: derived_margin, ticker: JPM, period: FY2025, name: gross_margin, as_of: 2026-03-01, expect: {abstain: no_comparable_mapping}}
+
+# ---- Q4 derivation & quarterly ----
+- {id: E16, template: q4, ticker: NVDA, metric: revenue,     fiscal_year: 2025, as_of: 2026-03-01, expect: {value: "39331000000", derived: true}}   # FY - Q1 - Q2 - Q3
+- {id: E17, template: q4, ticker: NVDA, metric: diluted_eps, fiscal_year: 2025, as_of: 2026-03-01, expect: {abstain: non_additive}}                 # EPS never subtracted
+- {id: E18, template: q4, ticker: AAPL, metric: total_assets, fiscal_year: 2025, as_of: 2026-03-01, expect: {value: "359241000000"}}                # instant = FY-end
+- {id: E19, template: metric_value, ticker: NVDA, metric: revenue, period: "Q3 FY2025", as_of: 2026-03-01, expect: {value: "35082000000"}}
+
+# ---- compare (comparability enforcement) ----
+- {id: E20, template: metric_compare, tickers: [AAPL, MSFT], metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {comparable: true,  values: ["416161000000", "281724000000"]}}
+- {id: E21, template: metric_compare, tickers: [AAPL, JPM],  metric: revenue, period: FY2025, as_of: 2026-03-01, expect: {comparable: false}}
+
+# ---- series & TTM ----
+- {id: E22, template: metric_series, ticker: NVDA, metric: revenue, last_n: 2, as_of: 2026-03-01, expect: {values: ["130497000000", "60922000000"]}}
+- {id: E23, template: ttm, ticker: NVDA, metric: revenue, as_of: 2026-03-01, expect: {value: "130497000000"}}  # last 4 quarters == the fiscal year
+
+# ---- point-in-time ----
+- {id: E24, template: metric_value, ticker: AAPL, metric: revenue, period: FY2025, as_of: 2025-01-01, expect: {abstain: no_data_as_of}}                    # 10-K not filed yet
+- {id: E25, template: metric_value, ticker: NVDA, metric: revenue, period: FY2024, as_of: 2024-06-01, expect: {value: "60922000000", accession: "0001045810-24-000029"}}  # only the FY2024 10-K is public

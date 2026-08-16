@@ -325,7 +325,7 @@ Stooq agreement on 2 tickers.
 
 ### 4.6 U13 headline extraction — the human-gated LLM
 
-Per 8-K Item 2.02 release: LLM (Anthropic API) reads the press-release HTML
+Per 8-K Item 2.02 release: LLM (Gemini API, free tier — DECISIONS.md #8) reads the press-release HTML
 and returns revenue, net income, diluted EPS with the exact source sentence
 quoted. Code validates units/scale fail-closed (a bare "30,040" with no
 "$ in millions" context is **rejected, never guessed**). Rows are staged for
@@ -357,7 +357,7 @@ quarterly filing's — proving the point-in-time window is real in our data.
 **Before the build can finish** (~3.5 h total, one-time):
 
 1. **Keys into `.env`** (5 min): `TIINGO_API_KEY` (free — tiingo.com) and
-   `ANTHROPIC_API_KEY`. Both currently empty.
+   `GEMINI_API_KEY` (free — aistudio.google.com). Both currently empty.
 2. **Spot-verify 20 facts** (~1 h): for 2 facts per company, open the real
    filing on EDGAR and confirm value + period + unit → recorded in
    `fixtures/spot_checks.json`, which the gate replays forever after.
