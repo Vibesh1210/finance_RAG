@@ -1,5 +1,10 @@
 # 02 · High-level design
 
+Repository layout (ADR-0022): `backend/` owns Python source, migrations, tests, gates,
+and scripts. `frontend/` owns the UI design and future browser code. Shared configuration,
+datasets, and this architecture documentation remain at the repository root. The UI is
+currently a design proposal; no frontend or HTTP adapter has been implemented.
+
 ## 1. The system on one page
 
 Two pipelines share one database. The **offline pipeline** (ingestion) runs once, or when
@@ -7,7 +12,7 @@ new filings appear, and fills the stores. The **online pipeline** (answering) ru
 question and only reads.
 
 ```
- OFFLINE — ingestion (src/us_rag/ingest/)                     ONLINE — answering (src/us_rag/query/)
+ OFFLINE — ingestion (backend/src/us_rag/ingest/)                     ONLINE — answering (backend/src/us_rag/query/)
  ─────────────────────────────────────────                    ──────────────────────────────────────
 
   SEC EDGAR ──(rate-limited client)──┐                          question + as_of date
@@ -53,7 +58,7 @@ question and only reads.
 | Security master | `entities.py`, `universe.py`, `store/seed.py` | Company / ticker / alias → one company, or "ambiguous" | [data_model](lld/data_model.md) |
 | Fiscal resolver | `fiscal.py` | "Q3 FY2025", "FY2024", "2024" → exact dates from `fiscal_calendars` | [data_model](lld/data_model.md) |
 | Units normaliser | `units.py` | Text quantities → exact Decimals; refuses when scale is unknown | [ingestion](lld/ingestion.md) |
-| Bitemporal store | `store/asof.py`, `db/migrations/` | The as-of read rule; append-only writes | [data_model](lld/data_model.md) |
+| Bitemporal store | `store/asof.py`, `backend/db/migrations/` | The as-of read rule; append-only writes | [data_model](lld/data_model.md) |
 | EDGAR client + backfill | `ingest/edgar.py`, `ingest/backfill.py` | Polite download of filings into `blobs/` + `documents` | [ingestion](lld/ingestion.md) |
 | Facts loader | `ingest/facts_load.py` | XBRL → `facts`, `fiscal_calendars`, restatement links | [ingestion](lld/ingestion.md) |
 | Narrative pipeline | `ingest/narrative.py` | HTML → sections → chunks → embeddings | [ingestion](lld/ingestion.md) |
@@ -64,7 +69,7 @@ question and only reads.
 | Router | `query/router.py` | Question → typed route + confidence + reason | [answering](lld/answering.md) |
 | Answer pipeline | `query/generate.py` | `answer()`: route → fetch → write → verify | [answering](lld/answering.md) |
 | Verifier | `query/verify.py` | Number/citation/comparability checks | [answering](lld/answering.md) |
-| Evaluation | `eval/`, `golden/`, `gates/` | Test questions, retrieval metrics, look-ahead scan, phase gates | [03](03_evaluation_and_testing.md) |
+| Evaluation | `eval/`, `golden/`, `backend/gates/` | Test questions, retrieval metrics, look-ahead scan, phase gates | [03](03_evaluation_and_testing.md) |
 
 ## 4. Key flows
 

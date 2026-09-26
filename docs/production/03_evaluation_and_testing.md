@@ -4,17 +4,17 @@ Three layers, from fastest to slowest:
 
 ```
 unit tests (pytest)      pure functions + a throwaway test DB      "does each piece behave?"
-phase gates (gates/)     the promises of each build step            "is each step still done?"
+phase gates (backend/gates/)     the promises of each build step            "is each step still done?"
 golden bank (golden/)    60 + 25 questions with known answers       "is the system any good?"
 ```
 
 ## 1. Unit tests
 
-- `tests/` — 136 test functions in 16 files (units, fiscal, entities, as-of facts, facts
+- `backend/tests/` — 136 test functions in 16 files (units, fiscal, entities, as-of facts, facts
   load, EDGAR client, narrative, headline, prices, metrics, retrieve, router, verify,
   generate, eval, look-ahead). Includes a property test (hypothesis): printing then
   parsing any amount returns the original.
-- `tests/conftest.py` drops and rebuilds a database `usrag_test` from the migrations and
+- `backend/tests/conftest.py` drops and rebuilds a database `usrag_test` from the migrations and
   seeds at the start of every session, so every run also tests the migrations. Each test's
   connection rolls back, which keeps tests isolated without breaking the append-only
   trigger.
@@ -22,9 +22,9 @@ golden bank (golden/)    60 + 25 questions with known answers       "is the syst
 
 ## 2. Phase gates
 
-A gate is a plain script, `gates/phase_NN.py`; exit code 0 = pass. It prints a checklist.
+A gate is a plain script, `backend/gates/phase_NN.py`; exit code 0 = pass. It prints a checklist.
 `make gate PHASE=N` runs one; `make gates` runs all in order and **stops at the first
-red one** (`gates/run_all.py`).
+red one** (`backend/gates/run_all.py`).
 
 | Gate | Checks | Current |
 |---|---|---|
@@ -81,7 +81,7 @@ to exclude, so the test fails if it ever becomes vacuous. Current: 0 leaks.
 ## 6. CI (`.github/workflows/ci.yml`)
 
 On every push: Postgres + pgvector service, `uv sync`, enable the extension,
-`gates/run_all.py`.
+`backend/gates/run_all.py`.
 
 **Known risks (unverified — the repo is private, so run results couldn't be checked from
 here):**

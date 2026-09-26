@@ -64,15 +64,15 @@ These are enforced by code and checked by gates; breaking one fails a gate.
 
 | Rule | Where it's enforced |
 |---|---|
-| **No LLM arithmetic** — every number comes from SQL or deterministic code | `query/metrics.py`, `query/verify.py`, `gates/phase_04.py` |
+| **No LLM arithmetic** — every number comes from SQL or deterministic code | `query/metrics.py`, `query/verify.py`, `backend/gates/phase_04.py` |
 | **Point-in-time** — nothing newer than `as_of` is ever read | `store/asof.py`, `query/retrieve.py`, look-ahead checks in gates 3 and 5 |
-| **Append-only facts** — corrections are new rows, never edits | DB trigger `facts_append_only`, lint in `gates/phase_01.py` (ADR-0005) |
-| **Fiscal periods are looked up, never computed** (U8) | `fiscal.py`, lint in `gates/phase_01.py` |
+| **Append-only facts** — corrections are new rows, never edits | DB trigger `facts_append_only`, lint in `backend/gates/phase_01.py` (ADR-0005) |
+| **Fiscal periods are looked up, never computed** (U8) | `fiscal.py`, lint in `backend/gates/phase_01.py` |
 | **Fail closed** — unknown scale, period, company or mapping → refuse, don't guess | `units.py`, `fiscal.py`, `entities.py`, `metrics.py` |
-| **EDGAR fair access** — ≤10 req/s, contact email in User-Agent | `ingest/edgar.py`, `gates/phase_02.py` |
-| **Offline checks** — gates never call external data APIs | all `gates/`; CI config |
+| **EDGAR fair access** — ≤10 req/s, contact email in User-Agent | `ingest/edgar.py`, `backend/gates/phase_02.py` |
+| **Offline checks** — gates never call external data APIs | all `backend/gates/`; CI config |
 | **Nothing unverified in the database** — model-extracted figures wait for human sign-off | `ingest/headline.py` (refuses to insert unverified rows) |
-| **Read-only answering** — the numbers path runs as a role that cannot write | `usrag_ro` role (`db/migrations/003_metrics.sql`), `db.connect_ro` |
+| **Read-only answering** — the numbers path runs as a role that cannot write | `usrag_ro` role (`backend/db/migrations/003_metrics.sql`), `db.connect_ro` |
 
 Performance targets are informal: seconds per question on a laptop (8 GB Apple M2). Cost
 target: zero (local embeddings, free-tier Gemini — ADR-0008).

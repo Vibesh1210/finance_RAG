@@ -10,6 +10,13 @@ number, point-in-time-safe retrieval, gate-driven build.
 
 *(This page is rewritten as the project's front page after M0 sign-off — roadmap step "Showcase 1".)*
 
+## Repository layout
+
+- [backend/](backend/README.md): Python source, database migrations, tests, gates, and scripts.
+- [frontend/](frontend/README.md): interview UI design and future frontend code.
+- `docs/`: shared architecture, learning material, roadmap, and project status.
+- Root configuration and datasets support both areas; run `make` and `uv` from this root.
+
 ## Quick start
 
 ```bash

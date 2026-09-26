@@ -1,6 +1,6 @@
 # LLD · Data model
 
-Source of truth: `db/migrations/001_core.sql`, `002_ingest.sql`, `003_metrics.sql`
+Source of truth: `backend/db/migrations/001_core.sql`, `002_ingest.sql`, `003_metrics.sql`
 (applied in order by `store/migrate.py`, tracked by filename in `schema_migrations`).
 
 ## 1. Entity map
@@ -65,7 +65,7 @@ Indexes: `facts_asof_idx (company_id, concept, period_end, knowledge_time)`,
 
 **Append-only trigger** (`facts_append_only`, ADR-0005): DELETE always raises; UPDATE
 raises unless it sets `superseded_by` from NULL exactly once with every other column
-unchanged. TRUNCATE is banned from `src/` by the Phase 1 lint.
+unchanged. TRUNCATE is banned from `backend/src/` by the Phase 1 lint.
 
 Current: 41,175 rows, 405 supersession links, 0 preliminary rows.
 

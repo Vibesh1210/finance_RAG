@@ -1,4 +1,4 @@
-"""Minimal migration runner: db/migrations/*.sql applied in filename order, once.
+"""Minimal migration runner: backend/db/migrations/*.sql applied in filename order, once.
 
 Deliberately primitive — no down-migrations (the store is append-only in spirit;
 schema mistakes are corrected by new migrations, mirroring U11 for data).
@@ -11,7 +11,7 @@ from pathlib import Path
 from us_rag.db import connect
 from us_rag.env import repo_root
 
-MIGRATIONS_DIR = repo_root() / "db" / "migrations"
+MIGRATIONS_DIR = repo_root() / "backend" / "db" / "migrations"
 
 
 def migrate(url: str | None = None) -> list[str]:

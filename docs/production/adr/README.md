@@ -30,6 +30,9 @@ Scope (what is and isn't built) · Process (how we work) · Operations (running 
 | [ADR-0018](ADR-0018-doc-consolidation.md) | Doc set consolidated; START_HERE.md added | Process | Superseded by ADR-0019 (layout) | 2026-09-17 |
 | [ADR-0019](ADR-0019-docs-three-sections.md) | Docs restructured into production, learning and implementation sections | Process | Accepted | 2026-09-26 |
 | [ADR-0020](ADR-0020-corpus-selection-and-load-scope.md) | Corpus selection, facts load scope, and Q4 calendar closure (recorded retroactively) | Data | Accepted | 2026-09-26 |
+| [ADR-0022](ADR-0022-backend-frontend-layout.md) | Backend code under `backend/`; frontend design and future UI under `frontend/` | Architecture | Accepted | 2026-09-26 |
+
+ADR-0021 is reserved by the staged E1 engineering plan.
 
 ## Writing a new ADR
 

@@ -2,6 +2,10 @@
 
 Everything runs locally on one laptop (developed on an 8 GB Apple M2).
 
+Run all commands below from the repository root (`US_rag/`). Backend source and tools
+live under `backend/`; frontend design lives under `frontend/docs/`. After pulling the
+directory move, refresh the editable Python install with `uv sync --group embed`.
+
 ## 1. Prerequisites
 
 - Docker Desktop (running), `uv`, Python 3.12 (uv installs it).
@@ -16,7 +20,7 @@ cp .env.example .env          # set SEC_EDGAR_USER_AGENT="US-rag/0.1 (you@exampl
 make up                       # Postgres 16 + pgvector on localhost:5433
 make sync                     # Python deps (dev group)
 uv sync --group embed         # + sentence-transformers / bge-m3 (needed for search, gate 3, and pyyaml)
-make migrate                  # apply db/migrations/*.sql
+make migrate                  # apply backend/db/migrations/*.sql
 make seed                     # companies, tickers, aliases, fiscal seeds
 ```
 

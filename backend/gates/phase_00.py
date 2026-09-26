@@ -28,7 +28,7 @@ REQUIRED_FILES = [
     "docs/implementation/roadmap.md",
     "docs/implementation/archive/design_us.md",
     "docs/implementation/archive/execution_plan_us.md",
-    "db/init/01_extensions.sql",
+    "backend/db/init/01_extensions.sql",
     ".github/workflows/ci.yml",
     "fixtures/company_tickers.json",
     "universe.json",
@@ -59,7 +59,7 @@ def check_db_and_pgvector() -> None:
     with psycopg.connect(url, connect_timeout=5) as conn:
         row = conn.execute("SELECT extname FROM pg_extension WHERE extname = 'vector'").fetchone()
     if row is None:
-        raise AssertionError("pgvector extension not installed (run `make up`; see db/init/)")
+        raise AssertionError("pgvector extension not installed (run `make up`; see backend/db/init/)")
 
 
 def check_universe_derivation() -> None:
@@ -68,7 +68,7 @@ def check_universe_derivation() -> None:
     if actual != expected:
         raise AssertionError(
             "universe.json is not byte-identical to its derivation from the snapshot "
-            "(regenerate: uv run python scripts/build_universe.py; never hand-edit)"
+            "(regenerate: uv run python backend/scripts/build_universe.py; never hand-edit)"
         )
 
 

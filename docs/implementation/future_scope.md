@@ -33,7 +33,31 @@ Original design sections (`§`) are in `archive/design_us.md`; original phases i
 | **Multi-hop research agent** | 11 | Planner-executor over retrieve/sql/graph tools with a step budget | Considered again in ADR-0017, not added | Research questions the single-shot path can't answer |
 | **Production hardening** | 13 | Stale-filing detection, facts-vs-source reconciliation, backup/restore drill, runbook | Not needed for a local learning project | Anyone else depends on it |
 
-## C. Data never in scope (design decisions, not deferrals)
+## C. Future direction — LLM-led answering (user, 2026-09-26)
+
+**Intent:** answers should eventually come from an LLM rather than from code templates.
+Not being worked on now — the current focus is RAG itself (the L1–L5 roadmap). Two shapes
+were discussed:
+
+| | Shape | Fits the no-LLM-arithmetic rule? |
+|---|---|---|
+| **A** | Relevant chunks + data go into the LLM; the LLM does any maths and writes the final answer | **No.** Reverses the project's core hard rule (a miscalculated number looks exactly like a right one). Needs an ADR superseding the rule, and changes the project story |
+| **B** (recommended) | The LLM uses this system as **tools**: it interprets the question ("last 2 years" → FY2024, FY2025), calls `get_metric` / `get_series` / `search_filings` / `compute_change`, then writes the final answer from the tool results | **Yes.** The LLM plans and writes; code fetches and calculates. This is original phase 11's rule: "the agent may request computations, never perform them" |
+
+```
+question ─► LLM plans ─► tool calls (exact data, as-of, cited) ─► compute tool (code does maths)
+         ─► LLM writes the answer ─► checker: every number matches a tool result, else reject
+```
+
+**Building blocks already present:** the engine functions in `query/metrics.py` (would
+become tools), `retrieve()` (the search tool), `verify()` (the core of the checker).
+**Still needed:** tool wrappers, a numeric checker for LLM-written prose (section A,
+first row), and L1's answer grader to measure whether the LLM version is actually better.
+
+**Revive when:** after the L-steps, or earlier if you decide to — via an ADR and a
+roadmap entry.
+
+## D. Data never in scope (design decisions, not deferrals)
 
 | Item | Why | Revisit trigger |
 |---|---|---|

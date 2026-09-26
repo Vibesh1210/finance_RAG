@@ -22,10 +22,10 @@ test:
 	uv run pytest -q
 
 gate:
-	uv run python gates/phase_$(PHASE_PADDED).py
+	uv run python backend/gates/phase_$(PHASE_PADDED).py
 
 gates:
-	uv run python gates/run_all.py
+	uv run python backend/gates/run_all.py
 
 verify-live:
-	uv run python scripts/verify_live.py
+	uv run python backend/scripts/verify_live.py

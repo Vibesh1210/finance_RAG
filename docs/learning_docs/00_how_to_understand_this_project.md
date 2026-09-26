@@ -14,14 +14,39 @@ test of whether it stuck.
 > a question in plain English; you get an **exact, sourced** answer — or an honest
 > **"I can't answer that, because…"**.
 
-Three words you'll see everywhere:
+Words you'll see everywhere:
 
-- **SEC** — the US regulator. Public companies must file reports with it.
-- **Filing** — one report. The big three: **10-K** (yearly report), **10-Q** (quarterly
-  report), **8-K** (news of an important event; the earnings *press release* is attached
-  to one of these).
+- **SEC** — the US regulator for stock markets. Public companies must file reports with it,
+  and anyone can read them for free on its website (called **EDGAR**).
+- **Filing** — one report sent to the SEC. The names (10-K, 10-Q, 8-K) are just the SEC's
+  form numbers.
 - **RAG** — "retrieval-augmented generation": instead of an AI answering from memory, you
   first *find* the relevant material, then answer from it.
+
+### The three kinds of report
+
+| Form | In plain words | How often | What's in it |
+|---|---|---|---|
+| **10-K** | The **annual report** | Once a year, ~1–2 months after the year ends | The full year: audited financial statements, the business description, **risk factors** (Item 1A), management's discussion of results (Item 7) |
+| **10-Q** | The **quarterly report** | 3 times a year — after quarters 1, 2 and 3 | The quarter: unaudited statements, a shorter management discussion, updated risks |
+| **8-K** | A **"something important happened" notice** | Whenever it happens, within ~4 business days | One event: a new CEO, a big deal — or, most often for us, **quarterly results**: the earnings **press release** is attached to an 8-K (as "Exhibit 99.1") |
+
+How they fit into one company's year — Caterpillar 2024, from our data:
+
+```
+Q1 ends ──► 8-K press release (Apr 25) ──► 10-Q full report (May 1)
+Q2 ends ──► 8-K press release          ──► 10-Q full report          (same pattern)
+Q3 ends ──► 8-K press release (Oct 30) ──► 10-Q full report (Nov 6)
+Q4 ends ──► 8-K press release (Jan 30) ──► 10-K ANNUAL report (Feb 14)   ← no 10-Q for Q4
+```
+
+Two things in that picture explain parts of the system you'll meet below:
+
+1. **The press release always comes first.** For a few days or weeks it is *all* the
+   public knows. That's exactly why the two clocks matter (Idea 2).
+2. **There's no 10-Q for the fourth quarter.** The 10-K covers the whole year instead, so
+   nobody ever files "Q4 revenue" as its own number. The system has to work it out as
+   full year − Q1 − Q2 − Q3 — the NVIDIA example in trap 1.
 
 ---
 
@@ -75,31 +100,54 @@ Why two? Numbers need to be **exact** — search is approximate by nature, so it
 produce a number. Words need to be **found** even when the question uses different words
 than the filing — a database lookup can't do that. Each lane is bad at the other's job.
 
-### Idea 2 — Two clocks: *what it's about* and *when the world knew it*
+### Idea 2 — Two clocks: *what it's about* and *when the world could know it*
 
-Every number and every piece of text carries two dates:
-
-```
-  CLOCK 1 — the period it describes      CLOCK 2 — when it became public
-  ("revenue for Jan–Mar 2024")           (the exact second the SEC accepted the filing)
-```
-
-Here is Caterpillar's first quarter of 2024, from our real data:
+Every number and every piece of text in the system carries **two dates**:
 
 ```
-  Jan ────── Mar 31              Apr 25                Apr 28              May 1
-  │ Q1 2024 happens │            press release         a question          10-Q (the full
-  │ (Clock 1)       │            filed (Clock 2)       asked "as of"       quarterly report)
-                                  ▲                     this date           filed (Clock 2)
-                                  │                        │                  ▲
-                                  └──── visible ◄──────────┤                  │
-                                                           └──── NOT visible ─┘ (it's the future)
+  CLOCK 1 — what time period it is ABOUT        CLOCK 2 — when the public could first READ it
+  "revenue earned Jan–Mar 2024"                  "the SEC accepted the report on 25 Apr 2024"
 ```
 
-Every read in the system carries an **as-of date**, and the database only returns things
-whose Clock 2 is on or before it. So "what did we know on 28 April?" gets an honest answer —
-the 1 May report can't leak in. This rule is built *into the database queries*, not
-applied afterwards, so no code path can forget it.
+**Start with an exam.** You sit an exam in March; the results come out in May.
+
+```
+  March                        April                        May
+  ┌──────────────┐                                          ┌──────────────┐
+  │ exam happens │                                          │ results out  │
+  │  (Clock 1)   │                                          │  (Clock 2)   │
+  └──────────────┘                                          └──────────────┘
+                    someone asks in April:
+                    "what was your score?"  ──►  honest answer: nobody knows yet
+```
+
+The exam already *happened* (Clock 1 is in the past), but the result wasn't *public*
+(Clock 2 is still in the future). Any answer given in April that uses the score is
+cheating — it uses information from the future.
+
+**Now the same thing with a company.** Caterpillar's first quarter of 2024 was published
+twice — a short press release first, the full quarterly report (a 10-Q) a week later.
+Same quarter, so same Clock 1; different Clock 2:
+
+```
+                              CLOCK 1 (what it's about)    CLOCK 2 (when it became public)
+  Press release (8-K)         Jan–Mar 2024                 25 April 2024
+  Full report (10-Q)          Jan–Mar 2024                 1 May 2024
+
+  Question "as of 28 April 2024"  →  may use the press release   (25 Apr ≤ 28 Apr)
+                                  →  may NOT use the 10-Q        (1 May is after 28 Apr — the future)
+```
+
+A normal database stores only Clock 1 ("this is Jan–Mar revenue"), so it can't tell those
+two apart and would happily use the 10-Q. This system stores both.
+
+**The rule, in one line:** every question carries an **as-of date**, and the database only
+returns things whose **Clock 2 is on or before that date**. The rule is written *inside*
+the database queries themselves, not applied afterwards, so no piece of code can forget it.
+
+> Why finance cares so much: if you test an investing idea on past data and it can "see"
+> reports that weren't out yet, it looks brilliant on paper and fails with real money.
+> That mistake is called **look-ahead**.
 
 And because the past can change (trap 3), nothing is ever overwritten:
 
@@ -253,8 +301,9 @@ understand; open the production doc when you want the exact detail.
 | 04 | The numbers lane | the metric dictionary, Q4 by subtraction, "doesn't apply" | `production/lld/numbers_engine.md` | `query/metrics.py` |
 | 05 | The words lane | meaning search vs keyword search, merging rankings | `production/lld/retrieval.md` | `query/retrieve.py` |
 | 06 | Answering | the router, the templates, the checker, refusing well | `production/lld/answering.md` | `query/router.py`, `generate.py`, `verify.py` |
-| 07 | Measuring it | test questions, recall scores, automatic checks | `production/03_evaluation_and_testing.md` | `eval/`, `golden/`, `gates/` |
+| 07 | Measuring it | test questions, recall scores, automatic checks | `production/03_evaluation_and_testing.md` | `eval/`, `golden/`, `backend/gates/` |
 | 08+ | One per new step: observability (L1), chunking (L2), reranking (L3), graphs (L4), monitoring (L5) | | new LLDs as they're built | |
+| — | **Project story** (`project_story.md`) | how to explain and defend the project; answers to the hard questions | `production/01_overview.md` | — |
 
 Status: **00 written.** 01–07 are written one at a time, each reviewed with you before the
 next. The old phase walkthroughs in `old_walkthroughs/` are raw material for them and get
@@ -349,6 +398,7 @@ when it was known · refuse or ask rather than guess.
 docs/
 ├── production/       the engineer's reference: how the system is built (HLD, LLDs, ADRs, runbook)
 ├── learning_docs/    this folder: the same system in plain words, one part at a time
+│   ├── project_story.md  how to explain and defend the project (for interviews)
 │   ├── glossary.md       every term, in plain words
 │   ├── exercises/        optional hands-on files that check themselves
 │   └── old_walkthroughs/ earlier per-phase notes, being replaced

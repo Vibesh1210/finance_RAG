@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - run: uv sync
-      # service containers can't mount db/init/, so CI provisions the same extension
+      # service containers can't mount backend/db/init/, so CI provisions the same extension
       # explicitly (ADR-0002); the gate itself remains a pure verifier.
       - run: psql "$DATABASE_URL" -c 'CREATE EXTENSION IF NOT EXISTS vector;'
-      - run: uv run python gates/run_all.py
+      - run: uv run python backend/gates/run_all.py

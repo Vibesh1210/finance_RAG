@@ -263,7 +263,7 @@ number below actually mean something. Tag `v0.1.0`.
 
 A step is done when all of these are true:
 
-1. **Gate:** its own `gates/<step>.py` passes, wired into `make gate`, and every earlier
+1. **Gate:** its own `backend/gates/<step>.py` passes, wired into `make gate`, and every earlier
    gate still passes.
 2. **Plan:** `docs/implementation/current/<step>.md` held the plan while building; on
    completion it moves to `docs/implementation/completed/`.

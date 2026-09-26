@@ -41,8 +41,10 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
 - Review the metric registry; confirm the golden bank
 
 **Engineering housekeeping (mine):**
-- Docker Desktop was not running on 2026-09-26 — nothing that needs the database has been
-  re-run since the doc restructure.
+- PostgreSQL remains unavailable on 2026-09-26. After the backend/frontend directory
+  split, 99 database-independent tests pass; 37 database tests were not run. Gate 0
+  passes four checks and fails only the database connection check. Compose configuration,
+  package/data paths, the dependency lockfile, and current documentation links validate.
 - CI risks: empty CI database, `pyyaml` not declared, bge-m3 not installed in CI
   ([03_evaluation_and_testing.md §6](../production/03_evaluation_and_testing.md)).
 - U13 extraction covers only 3 of 10 companies (free-tier quota).
@@ -50,6 +52,13 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
 
 ## Recent changes
 
+- **2026-09-26** — backend code, tests, database definitions, gates, and scripts moved
+  under `backend/`; UI design moved to `frontend/docs/`. Root commands/configuration and
+  shared datasets retained; path updates recorded in ADR-0022. No frontend implemented.
+- **2026-09-26** — [Interview UI design proposal](../../frontend/docs/interview_ui_design.md)
+  prepared for review: three core pages (Query & Evidence, Metrics & Evaluations,
+  Architecture with HLD/LLD) plus Data Explorer and Time Travel. No UI implemented;
+  stack and scope expansion remain proposed, and the roadmap order is unchanged.
 - **2026-09-26** — docs restructured into `docs/production`, `docs/learning_docs`,
   `docs/implementation` (ADR-0019); `DECISIONS.md` became ADRs; the never-written corpus
   selection decision recorded as ADR-0020.

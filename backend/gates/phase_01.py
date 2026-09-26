@@ -14,7 +14,7 @@ from us_rag.db import connect
 from us_rag.store.migrate import migrate
 from us_rag.store.seed import seed_fiscal_calendars, seed_security_master
 
-SRC = ROOT / "src" / "us_rag"
+SRC = ROOT / "backend" / "src" / "us_rag"
 
 
 def check_migrations_apply_and_idempotent() -> None:
@@ -33,7 +33,7 @@ def check_seeds_load() -> None:
 
 def check_pytest_suite() -> None:
     result = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", "tests"],
+        [sys.executable, "-m", "pytest", "-q", "backend/tests"],
         cwd=ROOT, capture_output=True, text=True,
     )
     if result.returncode != 0:

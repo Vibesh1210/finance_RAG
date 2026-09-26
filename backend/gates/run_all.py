@@ -5,9 +5,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
-gates = sorted(ROOT.glob("gates/phase_*.py"))
+gates = sorted(ROOT.glob("backend/gates/phase_*.py"))
 if not gates:
     sys.exit("no gates found")
 for gate in gates:

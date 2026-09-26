@@ -14,8 +14,8 @@ import tempfile
 from datetime import date
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "backend" / "src"))
 
 import httpx  # noqa: E402
 
@@ -47,7 +47,7 @@ if derived_from_live != committed:
     print("Refresh the snapshot + universe deliberately, then record it in an ADR (docs/production/adr/):")
     print("  curl -H \"User-Agent: $SEC_EDGAR_USER_AGENT\" -o fixtures/company_tickers.json \\")
     print("       https://www.sec.gov/files/company_tickers.json")
-    print("  uv run python scripts/build_universe.py")
+    print("  uv run python backend/scripts/build_universe.py")
     sys.exit(1)
 
 print("OK — universe derived from live SEC data matches committed universe.json.")

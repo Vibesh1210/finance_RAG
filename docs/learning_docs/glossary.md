@@ -128,7 +128,7 @@ what types.
 
 **Migration** — A script that changes the database shape, applied exactly once,
 in order. Lets the schema evolve without anyone hand-editing the database.
-*Ours:* `db/migrations/001_core.sql`.
+*Ours:* `backend/db/migrations/001_core.sql`.
 
 **Primary key** — The column that uniquely identifies a row (CIK for companies,
 accession for documents).
@@ -157,7 +157,7 @@ hand-entered fiscal calendars).
 
 ## Engineering process terms
 
-**Gate** — Our per-phase robot checklist (`gates/phase_NN.py`). A phase is
+**Gate** — Our per-phase robot checklist (`backend/gates/phase_NN.py`). A phase is
 "done" only when its gate script passes. No opinions, just exit codes.
 
 **Regression** — Something that used to work breaking later. `make gates` runs

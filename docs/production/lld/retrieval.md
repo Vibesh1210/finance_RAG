@@ -1,6 +1,6 @@
 # LLD · Retrieval
 
-`src/us_rag/query/retrieve.py`. Hybrid search over `chunks`, point-in-time by
+`backend/src/us_rag/query/retrieve.py`. Hybrid search over `chunks`, point-in-time by
 construction.
 
 ## 1. Pipeline

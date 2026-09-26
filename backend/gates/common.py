@@ -1,4 +1,4 @@
-"""Tiny gate runner. A gate is a plain script: `python gates/phase_NN.py`; exit 0 = pass.
+"""Tiny gate runner. A gate is a plain script: `python backend/gates/phase_NN.py`; exit 0 = pass.
 
 Plain python (not pytest) so a gate's output reads as a checklist and its exit code
 is the whole contract — CI and `make gate` need nothing else.
@@ -10,8 +10,8 @@ import sys
 from collections.abc import Callable
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src"))
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "backend" / "src"))
 
 
 def run_gate(name: str, checks: list[tuple[str, Callable[[], None]]]) -> None:

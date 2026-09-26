@@ -11,6 +11,11 @@ Docs live in three sections (ADR-0019):
 - docs/implementation/ — status, roadmap, current/ and completed/ step plans, future scope,
   the M0 sign-off checklist, and archive/ (the original design + execution plan, unchanged).
 
+Code is separated into backend/ (Python source, database definitions, tests, gates,
+scripts) and frontend/ (UI documentation and future browser application). Frontend-specific
+designs and plans live in frontend/docs/ (ADR-0022); shared docs retain the layout above.
+Run make/uv commands from the repository root, which owns Python configuration and data.
+
 Authority order: docs/implementation/roadmap.md (WHAT is built next, and each step's spec)
 > docs/production/ (HOW it is built now; if a doc disagrees with the code, the code wins and
 the doc gets fixed) > ADRs (WHY) > docs/implementation/archive/ (original intent; the
@@ -26,7 +31,7 @@ Hard rules (violations fail gates):
 - CI is fixtures-only: no external data-API calls in gates.
 
 Protocol for a step: write its plan in docs/implementation/current/<step>.md; implement to
-its gate (gates/<step>.py, wired into `make gate`); all earlier gates stay green; any
+its gate (backend/gates/<step>.py, wired into `make gate`); all earlier gates stay green; any
 deviation or choice is a new ADR in docs/production/adr/; update the LLD of every component
 touched in the same change; [HUMAN] tasks are for the human — stop and ask. The full
 definition of done is at the end of docs/implementation/roadmap.md.

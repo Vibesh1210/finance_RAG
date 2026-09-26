@@ -31,7 +31,7 @@ UNIVERSE = ["AAPL", "CAT", "COST", "DE", "JNJ", "JPM", "MSFT", "NVDA", "WMT", "X
 def _load_fixture(name: str) -> dict | list:
     path = FIXTURES / name
     if not path.exists():
-        raise AssertionError(f"missing fixture {name} — run scripts/freeze_phase02_fixtures.py")
+        raise AssertionError(f"missing fixture {name} — run backend/scripts/freeze_phase02_fixtures.py")
     return json.loads(path.read_text())
 
 
@@ -288,7 +288,7 @@ def check_u13() -> None:
 def check_fyfp_independence() -> None:
     result = subprocess.run(
         [sys.executable, "-m", "pytest", "-q",
-         "tests/test_facts_load.py::test_fyfp_never_touch_period_identity"],
+         "backend/tests/test_facts_load.py::test_fyfp_never_touch_period_identity"],
         cwd=ROOT, capture_output=True, text=True,
     )
     if result.returncode != 0:

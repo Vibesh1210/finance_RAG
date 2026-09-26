@@ -1,6 +1,6 @@
 # LLD · Numbers engine
 
-`src/us_rag/query/metrics.py`. The deterministic path for every number the system emits.
+`backend/src/us_rag/query/metrics.py`. The deterministic path for every number the system emits.
 No model writes SQL or does arithmetic here; results carry a citation or a typed
 abstention.
 
