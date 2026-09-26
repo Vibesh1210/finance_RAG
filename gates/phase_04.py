@@ -2,7 +2,7 @@
 (execution plan Phase 4).
 
 Deterministic path: execution_v0 must match exactly (no tolerance). Segment SQL is
-deferred (DECISIONS #13) — segment questions ride the Phase 3 narrative path for M0, so
+deferred (ADR-0013) — segment questions ride the Phase 3 narrative path for M0, so
 this gate checks only that the segment executor fails safe, not SQL exact-match.
 
 Loads bge-m3? No — the SQL path is model-free. It seeds the registry + applies migrations
@@ -157,7 +157,7 @@ def check_no_llm_arithmetic() -> None:
 
 
 def check_segment_deferred_fails_safe() -> None:
-    """DECISIONS #13: segment-SQL deferred; the executor must abstain cleanly, not error."""
+    """ADR-0013: segment-SQL deferred; the executor must abstain cleanly, not error."""
     with connect_ro() as ro:
         r = segment_value(ro, "NVDA", "revenue", "Data Center", "FY2025", as_of=NOW)
     if not isinstance(r, Abstention) or r.reason != "no_segment_data":
@@ -173,6 +173,6 @@ run_gate(
         ("Q4 derivation: NVDA Q4 FY2025 revenue = FY - sum(Q1..Q3), derived row", check_q4_derivation),
         ("JPM behaviors: revenue caveated non-comparable; gross profit/margin abstain", check_jpm_behaviors),
         ("no-LLM-arithmetic: derived numbers carry a computation record; verifier enforces", check_no_llm_arithmetic),
-        ("segment-SQL deferred (DECISIONS #13): executor abstains no_segment_data", check_segment_deferred_fails_safe),
+        ("segment-SQL deferred (ADR-0013): executor abstains no_segment_data", check_segment_deferred_fails_safe),
     ],
 )

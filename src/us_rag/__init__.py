@@ -1,1 +1,1 @@
-"""US Equity Financial RAG — see docs/design_us.md."""
+"""US Equity Financial RAG — see docs/production/README.md."""

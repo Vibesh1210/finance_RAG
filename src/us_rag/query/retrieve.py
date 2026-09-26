@@ -51,7 +51,7 @@ _model = None
 
 def _embedder():
     """Lazily load bge-m3 once and reuse it. Same CPU-safe defaults as the ingestion
-    backfill (DECISIONS.md #11) so query and corpus vectors come from one config."""
+    backfill (ADR-0011) so query and corpus vectors come from one config."""
     global _model
     if _model is None:
         from sentence_transformers import SentenceTransformer  # heavy import, on purpose

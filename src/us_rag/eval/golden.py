@@ -3,7 +3,7 @@
 The bank is YAML so it is human-readable and human-labelled. Every question is
 point-in-time (`as_of`). Factual questions carry gold PASSAGES (accession + section);
 quant questions carry a gold VALUE + provenance — the quant gold stays coupled to the
-Phase 2 spot-checks (DECISIONS #12), so it is provisional until those land.
+Phase 2 spot-checks (ADR-0012), so it is provisional until those land.
 
 `gold_keys` yields the (accession, section) tuples the metrics score against.
 """

@@ -5,7 +5,7 @@ It runs REAL retrieval, so it needs bge-m3 locally (the 'embed' group); this is 
 compute, not an external data-API call, so it stays within the fixtures-only CI rule.
 
 Status: the recall-baseline check (5) fails until the golden bank is [HUMAN]-verified and
-`golden/thresholds.yaml` is frozen (DECISIONS #12) — expected, mirrors phase_02.
+`golden/thresholds.yaml` is frozen (ADR-0012) — expected, mirrors phase_02.
 """
 
 from __future__ import annotations

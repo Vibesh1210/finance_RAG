@@ -4,9 +4,9 @@ Decision-support RAG over SEC filings, 8-K earnings releases, and market data fo
 pinned 10-company US universe. Bitemporal facts store, deterministic SQL for every
 number, point-in-time-safe retrieval, gate-driven build.
 
-- **Start here:** `START_HERE.md` (doc map + the plan) · **Current state:** `STATUS.md`
-- **Design:** `docs/design_us.md` · **Build detail:** `docs/execution_plan_us.md` · **What's next:** `docs/roadmap_learning.md`
-- **Learning track:** `learn/README.md` · **Decisions log:** `DECISIONS.md` · **Working agreement:** `CLAUDE.md`
+- **Start here:** `START_HERE.md` · **Current state:** `docs/implementation/status.md`
+- **How it's built:** `docs/production/` (HLD, LLDs, ADRs, runbook) · **What's next:** `docs/implementation/roadmap.md`
+- **Learning track:** `docs/learning_docs/` · **Working agreement:** `CLAUDE.md`
 
 *(This page is rewritten as the project's front page after M0 sign-off — roadmap step "Showcase 1".)*
 

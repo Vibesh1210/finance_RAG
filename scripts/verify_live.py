@@ -3,7 +3,7 @@
 Makes ONE network call to https://www.sec.gov/files/company_tickers.json using the
 fair-access User-Agent from .env, re-derives the universe from the LIVE data through
 the same pinned logic (including CIK_OVERRIDES), and diffs against the committed
-universe.json. Prints a paste-ready DECISIONS.md line. Never wired into CI
+universe.json. Prints a paste-ready ADR note. Never wired into CI
 (fixtures-only rule).
 """
 
@@ -44,7 +44,7 @@ live_path.unlink()
 
 if derived_from_live != committed:
     print("MISMATCH — universe derived from LIVE SEC data differs from committed universe.json.")
-    print("Refresh the snapshot + universe deliberately, then record it in DECISIONS.md:")
+    print("Refresh the snapshot + universe deliberately, then record it in an ADR (docs/production/adr/):")
     print("  curl -H \"User-Agent: $SEC_EDGAR_USER_AGENT\" -o fixtures/company_tickers.json \\")
     print("       https://www.sec.gov/files/company_tickers.json")
     print("  uv run python scripts/build_universe.py")
@@ -52,6 +52,6 @@ if derived_from_live != committed:
 
 print("OK — universe derived from live SEC data matches committed universe.json.")
 print(
-    f"DECISIONS.md line: `{date.today()} — make verify-live: live derivation matches "
+    f"ADR note: `{date.today()} — make verify-live: live derivation matches "
     "committed universe.json (10/10).`"
 )

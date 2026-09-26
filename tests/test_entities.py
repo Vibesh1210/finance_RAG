@@ -21,7 +21,7 @@ def test_full_sec_name(conn):
 
 
 def test_xom_resolves_to_predecessor_cik(conn):
-    # DECISIONS.md #4: the filing entity, not the 2026-07-01 successor registrant
+    # ADR-0004: the filing entity, not the 2026-07-01 successor registrant
     assert resolve_one(conn, "XOM").cik == "0000034088"
 
 

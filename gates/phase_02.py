@@ -4,11 +4,11 @@ prices, U13 preliminary rows, supersession.
 Fixtures-only: talks to the local/CI postgres and committed fixtures; no external
 data-API calls (the live limiter behaviour is re-exercised deterministically in
 check 6, not by hitting EDGAR). Maps 1:1 to the nine gate points in
-docs/execution_plan_us.md, Phase 2.
+docs/implementation/archive/execution_plan_us.md, Phase 2.
 
 Checks that depend on [HUMAN] verification or a market-data API key fail with a
 clear, actionable message until that input arrives — that is the gate doing its
-job, not a defect. See STATUS.md for the live blocker list.
+job, not a defect. See docs/implementation/status.md for the live blocker list.
 """
 
 from __future__ import annotations
@@ -264,7 +264,7 @@ def check_u13() -> None:
             raise AssertionError(
                 "[HUMAN+2e] no U13 preliminary rows loaded — verify every row in "
                 "fixtures/u13_staged.json against its 8-K Ex-99, then load them "
-                "(rows insert with human_verified=true; DECISIONS.md #5)"
+                "(rows insert with human_verified=true; ADR-0005)"
             )
         for fid, cid, concept, period_end, ktime, prelim, verified in rows:
             if not prelim:
@@ -313,7 +313,7 @@ def check_supersession() -> None:
     if found is None:
         raise AssertionError(
             "no comparative-revision supersession detected for the frozen JNJ/Kenvue case "
-            "— if genuinely none exists corpus-wide, add a DECISIONS.md audit entry "
+            "— if genuinely none exists corpus-wide, add an ADR audit entry "
             "(never pass silently)"
         )
     if Decimal(str(found[0])) != Decimal(case["superseding"]["value"]):

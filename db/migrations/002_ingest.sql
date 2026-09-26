@@ -2,7 +2,7 @@
 
 -- Corpus membership is a property of the document, not of its form: the facts
 -- loader also registers PRE-corpus accessions (metadata-only, no blob) so that
--- supersession pairs and as-reported-then baselines exist (DECISIONS.md #9).
+-- supersession pairs and as-reported-then baselines exist (ADR-0020).
 -- Gate registry counts are scoped to corpus = TRUE.
 ALTER TABLE documents ADD COLUMN corpus BOOLEAN NOT NULL DEFAULT FALSE;
 

@@ -143,7 +143,7 @@ def check_resolver_canary() -> None:
         if res.period_end != date(2024, 10, 27):
             raise AssertionError(f"NVDA Q3 FY2025 resolved to {res.period_end}")
         if resolve_one(conn, "XOM").cik != "0000034088":
-            raise AssertionError("XOM must resolve to the predecessor CIK (DECISIONS.md #4)")
+            raise AssertionError("XOM must resolve to the predecessor CIK (ADR-0004)")
 
 
 run_gate(

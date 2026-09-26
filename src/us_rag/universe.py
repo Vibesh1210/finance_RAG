@@ -2,8 +2,8 @@
 
 universe.json is DERIVED from fixtures/company_tickers.json plus the constants
 below. Never hand-edit it: the Phase 0 gate re-derives it byte-for-byte
-(DECISIONS.md #3). The design table's CIK column is a hint only; the SEC
-snapshot wins on any mismatch (surfaced as a warning, logged in DECISIONS.md).
+(ADR-0003). The design table's CIK column is a hint only; the SEC
+snapshot wins on any mismatch (surfaced as a warning, recorded in an ADR (docs/production/adr/)).
 """
 
 from __future__ import annotations
@@ -30,9 +30,9 @@ PINNED_UNIVERSE = [
 # Ticker→CIK is itself point-in-time (design §4.3). When a successor registrant takes
 # a ticker, the live snapshot maps to the entity that holds the listing *today*, not
 # the one that filed the corpus-window documents. Overrides pin the filing entity;
-# each carries the reason and lands in DECISIONS.md.
+# each carries the reason and lands in an ADR (docs/production/adr/).
 CIK_OVERRIDES = {
-    # DECISIONS.md #4: ExxonMobil holding-company reorganization, effective 2026-07-01
+    # ADR-0004: ExxonMobil holding-company reorganization, effective 2026-07-01
     # (8-K12B by successor CIK 0002115436, "ExxonMobil Holdings Corp"). All FY2024/
     # FY2025 filings live under the predecessor below; the successor has no 10-K/10-Q.
     "XOM": (
@@ -67,7 +67,7 @@ def build_universe(snapshot_path: Path) -> str:
         if entry["cik"] != design_cik:
             print(
                 f"WARNING {ticker}: design-table CIK {design_cik} != resolved "
-                f"{entry['cik']} — snapshot wins; add a DECISIONS.md note."
+                f"{entry['cik']} — snapshot wins; add an ADR note."
             )
         entries.append(entry)
     return json.dumps(entries, indent=2) + "\n"

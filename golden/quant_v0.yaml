@@ -2,7 +2,7 @@
 #
 # DRAFT for [HUMAN] verification. Values + provenance were pulled from the loaded facts;
 # each must be confirmed against the actual filing (accession) before this bank is frozen.
-# Per DECISIONS #12 these gold values are PROVISIONAL until the Phase 2 spot-checks land —
+# Per ADR-0012 these gold values are PROVISIONAL until the Phase 2 spot-checks land —
 # a "correct number" is only as trustworthy as the data it is checked against.
 #
 # as_of = 2026-03-01: every FY2024 and FY2025 10-K is public by then, so the answers are

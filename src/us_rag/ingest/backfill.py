@@ -1,6 +1,6 @@
 """Backfill (plan 2a): the full U2 corpus fetched to blobs/ and registered.
 
-Corpus selection per company (DECISIONS.md #9):
+Corpus selection per company (ADR-0020):
 - periodic filings (10-K/10-Q and their /A amendments): report period end inside
   [FY2024 start, FY2025 end], where the boundaries come from the company's OWN
   annual XBRL contexts in companyfacts (FY label = calendar year containing the

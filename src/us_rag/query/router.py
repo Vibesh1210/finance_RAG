@@ -1,6 +1,6 @@
 """Phase 5 router (design §6.0): map a question to a typed route.
 
-Deterministic for M0 (DECISIONS #14) — auditable, testable, and it cannot commit the one
+Deterministic for M0 (ADR-0014) — auditable, testable, and it cannot commit the one
 dangerous misroute (a numeric question going to the text-only path). Entity resolution and
 fiscal resolution run BEFORE routing; the router never guesses a period. An LLM classifier
 is the drop-in upgrade behind the same `RouteDecision` interface.
@@ -113,7 +113,7 @@ def classify(question: str, tickers: list[str]) -> RouteDecision:
     if metric_intent and tickers and not _has_period(q):
         return RouteDecision("clarify", 0.6, tickers, "metric without a period — needs the fiscal period (and basis)")
 
-    # ---- 5. segment & point-in-time preliminary → narrative path for M0 (DECISIONS #13) ----
+    # ---- 5. segment & point-in-time preliminary → narrative path for M0 (ADR-0013) ----
     if re.search(_SEGMENT, q):
         return RouteDecision("narrative", 0.7, tickers, "segment question → narrative path for M0 (#13)")
     if re.search(r"as of|had .*(reported|announced)|announced", q):

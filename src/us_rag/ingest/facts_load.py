@@ -6,7 +6,7 @@ Hard rules implemented here:
 - knowledge_time = the reporting accession's EDGAR acceptance datetime (§4.2).
 - Decimal-exact: companyfacts is parsed with parse_float=Decimal so no value ever
   passes through a float (units.normalize_xbrl enforces).
-- Load scope (DECISIONS.md #9): every (concept, unit, period) identity group that
+- Load scope (ADR-0020): every (concept, unit, period) identity group that
   at least one CORPUS accession reports — all corpus entries, plus the LATEST
   pre-corpus entry as the as-reported-then baseline. Baseline accessions are
   registered as metadata-only documents (corpus = FALSE, no blob), so historical
@@ -202,7 +202,7 @@ def derive_calendar(
 
     Q4 is rarely a reported context (there is no standalone Q4 filing); it is the
     CLOSURE of the reported year after reported Q3 — set difference of reported
-    boundaries, not a calendar formula (DECISIONS.md #9).
+    boundaries, not a calendar formula (ADR-0020).
     """
     fy_start, fy_end = fy_window
     acceptance = corpus_acceptance or {}

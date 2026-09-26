@@ -19,7 +19,7 @@ Workflow:
      value_text after human edits
   4. python -m us_rag.ingest.headline insert    → facts rows, source='8K-EX99',
      preliminary=TRUE, human_verified=TRUE at insert (the append-only trigger
-     forbids post-insert flag flips — DECISIONS.md #5), knowledge_time = the
+     forbids post-insert flag flips — ADR-0005), knowledge_time = the
      8-K acceptance datetime.
 
 Rows are keyed (accession, concept): extract and insert are both idempotent.

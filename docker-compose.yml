@@ -1,7 +1,7 @@
 services:
   db:
     # pin U12: postgres:16 + pgvector. The official pgvector image IS postgres:16
-    # with the extension compiled in (see DECISIONS.md #2).
+    # with the extension compiled in (see ADR-0002).
     image: pgvector/pgvector:pg16
     container_name: us_rag_db
     environment:

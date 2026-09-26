@@ -179,7 +179,7 @@ def answer(
 
 
 def gemini_generate(question: str, evidence: list[dict]) -> str:
-    """Real narrative synthesis over retrieved passages (Gemini, DECISIONS #8). Opt-in —
+    """Real narrative synthesis over retrieved passages (Gemini, ADR-0008). Opt-in —
     never called by the fixtures-only gate. Instructed to cite and to invent no numbers."""
     from google import genai
 

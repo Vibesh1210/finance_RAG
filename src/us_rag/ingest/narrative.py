@@ -372,7 +372,7 @@ def embed_missing(conn: psycopg.Connection, *, batch_size: int = 8) -> int:
     """Dense bge-m3 vectors for chunks that lack one. Separate pass: the extractor
     stays model-free; this needs the 'embed' dependency group (U9).
 
-    Memory-bounded for 8 GB Apple-Silicon laptops (DECISIONS.md #11). Defaults:
+    Memory-bounded for 8 GB Apple-Silicon laptops (ADR-0011). Defaults:
     CPU device — the earlier default ran the model on the M-series GPU, which
     shares the 8 GB with the display and OOM'd mid-run; a small batch; and a
     2048-token sequence cap (the longest real chunk is 1634 tokens, so no chunk
