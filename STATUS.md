@@ -1,8 +1,9 @@
-# STATUS — read this first
+# STATUS — current state
 
 Global state file for any AI or human picking up this repo. Maintained per
-DECISIONS.md #7: updated at every phase transition and whenever blockers change.
-The active phase's theory-to-code deep dive lives in `CURRENT_PHASE.md`.
+DECISIONS.md #7 (amended by #18): updated at every step transition and whenever blockers
+change. For the doc map and the plan, read `START_HERE.md` first. The active step's
+plain-language brief lives at `learn/<step>_brief.md` until its walkthrough replaces it.
 
 ## What this project is
 
@@ -25,10 +26,11 @@ Authority order: `docs/execution_plan_us.md` (build order) > `docs/design_us.md`
 
 ## Phase map
 
-**Committed target (DECISIONS.md #15, supersedes #9):** ship **M0** (Phase 5), then a
-**learning-focused** selection — L1 observability+cost eval, L2 reranker, L3 GraphRAG POC,
-L4 monitoring POC (`docs/roadmap_learning.md`). Cut: web API, fine-tune, news/conversation,
-real-time data, full hardening.
+**Committed target (DECISIONS.md #15 + #16 + #17, supersedes #9):** ship **M0** (Phase 5),
+then (`docs/roadmap_learning.md`): Showcase 1 README → L1 observability+cost+answer grading →
+Showcase 2 local demo page + video → L2 chunking eval → L3 reranker → L4 GraphRAG POC →
+L5 monitoring POC. Cut: web API, fine-tune, news/conversation, agentic multi-hop, real-time
+data, full hardening.
 
 | Phase | What | Status |
 |---|---|---|
@@ -38,10 +40,27 @@ real-time data, full hardening.
 | 3 | Eval harness, golden bank (60 Qs), hybrid retrieval, look-ahead gate | gate 4/5 — recall baseline pending [HUMAN] verify + freeze |
 | 4 | SQL branch: metric mappings, template compiler, read-only executor | gate 6/6 GREEN (execution_v0 golds [HUMAN]-provisional; registry review pending) |
 | 5 | Router, generation, verification → **M0** | ✅ **gate GREEN 7/7 — M0 REACHED** (golds [HUMAN]-provisional) |
-| 6–9 | API/cache · news+remarks · reranker/conversation · fine-tune (M1) | 🧊 polish — opt-in after M0 |
-| 10–13 | Graph · multi-hop · monitoring · hardening (M2–M5) | 🧊 shelved (DECISIONS.md #9) |
+| — | **M0 sign-off:** verification checklist + Tiingo key → golden bank frozen, `v0.1.0` | ⏳ **next** — 0/159 items ticked |
+| — | Showcase 1: README rewrite with real numbers | ⏳ after sign-off |
+| L1 | Observability + cost + answer grading (LLM judge, calibrated) | ⏳ |
+| — | Showcase 2: local demo page + video | ⏳ |
+| L2 | Chunking eval (quote-level key, 4 variants) | ⏳ |
+| L3 | Reranker (on/off, measured lift + latency) | ⏳ |
+| L4 | GraphRAG POC | ⏳ |
+| L5 | Monitoring POC | ⏳ |
+| 6–13 | Original phases 6–13 | ✂️ replaced by the rows above (DECISIONS #15–17); API, fine-tune, news, agentic, hardening cut |
 
-## Current state (updated 2026-07-31)
+## As of 2026-09-18 — the short version
+
+- **M0 is built** (last code commit "M0 Done", 2026-08-16): all six phases, M0 gate 7/7.
+- **Every score is provisional** — measured against an answer key the human has not yet
+  verified. `golden/thresholds.yaml` is still empty. Nothing may be quoted yet.
+- **No post-M0 code exists.** The docs/plan were consolidated 2026-09-17 (DECISIONS #16–18).
+- **Next action:** the human works through `learn/verification_guide.md` (159 items);
+  then Claude freezes the bank, re-runs gates 2/3, tags `v0.1.0`, and Showcase 1 starts.
+- Uncommitted: the 2026-09-17 doc consolidation (see `git status`).
+
+## Build log (chronological, oldest first — kept for the record)
 
 - Phases 0–1 complete; **all three gates re-run green on 2026-07-31**
   (`phase_00` 5/5, `phase_01` 8/8). Phase 2 work is still **uncommitted**.
@@ -171,8 +190,8 @@ band 83–111; `phase_01` green again); `GEMINI_API_KEY` now set (2e ran).
   (`human_countersigned=true` in `fixtures/supersession_confirmed.json`).
 - **[HUMAN, non-gating]** curate IR prepared-remarks manifest (U5, best-effort).
 
-When the gate is green: archive `CURRENT_PHASE.md` → `learn/phase_02_brief.md` and
-write the `learn/phase_02.md` walkthrough + exercise (CLAUDE.md learning loop).
+All six phase walkthroughs + exercises are written (`learn/phase_00.md` … `phase_05.md`).
+The next doc to write is the brief for the next step once M0 sign-off starts.
 
 ## How to verify state
 
@@ -181,5 +200,5 @@ make gates          # all completed phase gates must stay green
 make gate PHASE=N   # run one phase's gate
 ```
 
-Deviations and pinned interpretations: `DECISIONS.md` (7 entries).
-Per-phase technical writeups: `phases_docs/`. Learning track: `learn/README.md`.
+Deviations and pinned interpretations: `DECISIONS.md` (18 entries).
+Doc map + plan: `START_HERE.md`. Learning track: `learn/README.md`.

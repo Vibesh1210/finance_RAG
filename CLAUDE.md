@@ -1,17 +1,15 @@
 # US Equity Financial RAG
 
-Start every session by reading STATUS.md (global state: target, phases, current,
-done, blockers) and CURRENT_PHASE.md (theory-to-code deep dive of the active
-phase). Maintain both (DECISIONS.md #7): update STATUS.md at every phase
-transition and whenever blockers or notable progress change; when a phase's gate
-goes green, archive CURRENT_PHASE.md to learn/phase_NN_brief.md and rewrite it
-for the next phase BEFORE building. CURRENT_PHASE.md follows the learning rules
-below — plain language, theory → code, complete pipeline flow, no unexplained
-jargon.
+Start every session by reading START_HERE.md (the doc map + the plan) and STATUS.md
+(global state: target, steps, current, done, blockers). Maintain STATUS.md (DECISIONS.md
+#7, amended by #18): update it at every step transition and whenever blockers or notable
+progress change.
 
-Architecture authority: docs/execution_plan_us.md (build order) > docs/design_us.md (design).
-This project is self-contained — no external documents are required. The sibling
-india_rag/ project is independent; its docs are never an authority here.
+Authority order: docs/roadmap_learning.md (WHAT is built next, post-M0) >
+docs/execution_plan_us.md (HOW each piece is built) > docs/design_us.md (design + reasons)
+> STATUS.md (state summary only — never an authority). This project is self-contained — no
+external documents are required. The sibling india_rag/ project is independent; its docs
+are never an authority here.
 
 Hard rules (violations fail gates):
 - U8: fiscal periods are resolved from fiscal_calendars, never computed by formula.
@@ -20,15 +18,17 @@ Hard rules (violations fail gates):
 - EDGAR client: never bypass the rate limiter; never remove the User-Agent.
 - CI is fixtures-only: no external data-API calls in gates.
 
-Protocol: read this file + the current phase in docs/execution_plan_us.md; implement
-to the gate; `make gate PHASE=N`; all previous gates stay green (`make gates`);
-deviations go in DECISIONS.md; [HUMAN] tasks are for the human — stop and ask.
-
-Per-phase writeups (what was built and why, code + theory) live in phases_docs/.
+Protocol: read this file + the step's spec (docs/roadmap_learning.md for L/Showcase steps,
+docs/execution_plan_us.md for build detail); implement to the gate; `make gate PHASE=N`;
+all previous gates stay green (`make gates`); deviations go in DECISIONS.md; [HUMAN] tasks
+are for the human — stop and ask. Each new step adds its own gates/ script and wires it
+into `make gate`.
 
 Learning loop (DECISIONS.md #6 — the user is learning this domain; equal goal):
-- BEFORE building phase N: write learn/phase_NN_brief.md — the concept in plain
-  language, zero unexplained jargon (glossary: learn/glossary.md).
-- AFTER the gate is green: write learn/phase_NN.md — plain walkthrough + ONE
-  small rebuild-it-yourself exercise (self-checking where possible).
-- Answer any "what does X mean" question at any depth, without jargon.
+- BEFORE building a step: write learn/<step>_brief.md — the concept in plain language,
+  zero unexplained jargon (glossary: learn/glossary.md).
+- AFTER the gate is green: write learn/<step>.md — plain walkthrough + ONE small
+  rebuild-it-yourself exercise (self-checking where possible), then fold the brief into it
+  and delete the brief, so learn/ holds one file per step.
+- Answer any "what does X mean" question at any depth, without jargon. Explain the
+  project's own labels too (M0, L1, "gate", "[HUMAN]") the first time they appear.

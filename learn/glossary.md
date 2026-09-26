@@ -261,3 +261,87 @@ matches a retrieved record — a mismatch kills the answer (Phase 4–5).
 **Golden questions** — A fixed exam of 60 hand-labeled questions the system is
 graded against forever (Phase 3). Written before tuning so we can't
 accidentally teach to the test.
+
+## Terms for the post-M0 plan (added 2026-09-18)
+
+**Milestone / M0** — A group of build steps that together give a usable version.
+M0 = phases 0–5 = the first working system. M1–M5 were the original later
+groups; they've been replaced by the L steps below.
+
+**L1–L5 / Showcase** — The eight remaining steps (`docs/roadmap_learning.md`).
+"L" = a learning step that builds a RAG skill; "Showcase" = a step that makes
+the project presentable (README, demo page). Numbered in build order.
+
+**[HUMAN]** — A task only you can do (reading a filing, grading an answer,
+making a scope call). The build stops and waits when it hits one.
+
+**Provisional vs frozen** — An answer key is *provisional* while it's only the
+AI's draft, and *frozen* once you've confirmed it. Scores on a provisional key
+prove nothing; scores on a frozen key are the baseline everything is measured
+against. M0's key is still provisional.
+
+**Baseline / ratchet** — The first score recorded on the frozen key. "Ratchet
+up only" means a later change may never score lower without a written reason.
+
+**Observability** — Being able to see what the system did on each question
+from its records alone, without re-running it.
+
+**Trace** — The record one question leaves behind: which lane it took, what
+search returned with scores, which SQL ran, what the verifier decided, and
+the time, tokens and cost of each step. One file per question (L1).
+
+**Latency** — How long a question takes, usually split per step. "Median" =
+the typical case; "p95" = the slow one-in-twenty case.
+
+**Token** — The unit AI models read and write in; roughly three-quarters of a
+word. Cost and speed both scale with tokens.
+
+**LLM-as-judge** — Using a second AI model to grade the first one's written
+answers. Only trustworthy after you've checked it agrees with your own grades
+on a sample (L1 uses ~20 answers).
+
+**Faithfulness** — Does every claim in a written answer come from the sources
+it was given? An unsupported claim is a hallucination.
+
+**Relevance** — Did the answer address the question actually asked?
+
+**recall@10 / MRR / nDCG@10** — Three ways to score search. recall@10: of the
+right passages, how many are in the top 10. MRR: how high the *first* right
+one appears. nDCG@10: are the right ones near the top, not just present.
+
+**Answer-hit@k** — L2's finer score: is the exact answering sentence inside
+at least one of the top-k chunks? Stricter than "right section".
+
+**Overlap** — When cutting text into chunks, repeating the last ~100 tokens of
+one chunk at the start of the next, so a sentence on the boundary isn't split.
+
+**Cross-encoder** — The reranker's kind of model. An embedding model scores
+the question and each chunk separately; a cross-encoder reads them *together*,
+which is more accurate and much slower — hence only over the top 20.
+
+**Lift** — The improvement a change produces on the frozen key, e.g. "+0.05
+nDCG@10". Always quoted next to its cost (added latency).
+
+**A/B comparison** — Running the system with and without a change on the
+same questions, so the only difference in the scores is the change.
+
+**Knowledge graph / GraphRAG** — A map of *things and how they relate*
+(Walmart —peer-of→ Costco) instead of passages. Answers "which/how related"
+questions that passage search can't. Each link carries its source quote.
+
+**Precision / recall (alerts)** — Precision: of the alerts sent, how many
+were worth reading. Recall: of the events worth an alert, how many got one.
+A monitor that cries wolf has low precision.
+
+**Watchlist / monitor / dedup** — Watchlist: the companies you want alerts
+for. Monitor: the job that checks new filings against it. Dedup: never
+alerting twice for the same filing.
+
+**Tiingo** — The free market-data service for daily stock prices. Its key
+in `.env` is the one thing missing to load prices.
+
+**Gemini** — The Google model that writes the narrative text of answers.
+The only model call in the answer path; it never produces numbers.
+
+**Demo page (Streamlit)** — A single local web page over the system for
+showing it working. Not a server, not hosted — the video is what people see.

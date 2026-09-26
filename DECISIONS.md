@@ -196,3 +196,68 @@ engineering and a specialized ML side-quest — neither teaches transferable RAG
 Supersedes #9 (stop-at-M0). M0 verification is still the gate to freeze the golden bank so
 reranker/graph "lift" numbers are trustworthy. Execution plan + design doc remain the HOW
 authorities for each subset.
+
+## 2026-09-17 — #16: chunking evaluation added as L2 (amends #15)
+
+User decision (2026-09-17): add a chunking evaluation to the post-M0 roadmap, after
+observability (L1) and before the reranker. Why: the retrieval eval grades at (filing,
+section) level — `eval/harness.py` collapses returned chunks to `(accession, section)` keys
+before scoring — so any chunk from the right section counts as a hit. It cannot tell
+whether the answer text was retrieved, cannot see answers split across chunks, and compares
+chunking strategies only coarsely. The chunk parameters (~800 tokens / ~100 overlap, design
+§4.5) were set in the design and never measured; real chunks run up to 1,634 tokens (#11).
+The same blind spot would hide part of a reranker's lift (a better chunk moved up within one
+section doesn't change the score). New L2 adds a quote-level answer key
+(`golden/snippets_v0.yaml`, additive — the frozen section-level bank is untouched), chunk-level
+metrics (answer-hit@k, split answers), and a side-by-side chunk-size experiment; the reranker
+is then measured at both levels. Renumbering: reranker L2→L3, GraphRAG L3→L4, monitoring
+L4→L5. Spec: `docs/roadmap_learning.md`. Design §4.5 parameters stand unless L2's written
+decision changes them.
+
+## 2026-09-17 — #17: answer grading added to L1; README and demo page added as Showcase steps (amends #15)
+
+User decision (2026-09-17): the project should also read well as a portfolio piece for a
+~1-year-experience candidate. Three gaps were identified and added to
+`docs/roadmap_learning.md`:
+- **Answer grading (in L1).** The verifier checks numbers strictly, but nothing grades the
+  *text* of narrative answers — the M0 gate is model-free and design §10.1 has no
+  answer-text metric. L1 adds an LLM judge (faithfulness: each claim supported by the
+  retrieved chunks; relevance: answers the question), calibrated against ~20 hand-graded
+  answers ([HUMAN], `golden/judge_calibration_v0.yaml`) before its scores are quoted. The
+  judge never grades numbers, ideally uses a different model from the generator, and runs
+  in the report CLI only — gates stay fixtures-only.
+- **Showcase 1 — README**, right after M0 sign-off (first real numbers): problem,
+  architecture diagram, results from the frozen bank, design choices, how to run. Every
+  later L updates its results table.
+- **Showcase 2 — demo page + ~2-minute video**, right after L1 (so the trace can be shown):
+  a single local page calling `answer()` directly, not hosted. This does **not** revive
+  phase 6's web API, which stays cut per #15 (no endpoints, cache, auth or hosting).
+Considered and not added: an agent/tool-calling POC (phase 11 stays cut). Estimate moves
+from ~7–9 to ~8–10 weeks.
+
+## 2026-09-17 — #18: doc set consolidated; START_HERE.md is the entry point (amends #7)
+
+User decision (2026-09-17): remove docs that were stale or duplicated, and write one
+document that explains how to read the rest and how the project will be finished.
+
+**Removed** (all recoverable from git history):
+- `CURRENT_PHASE.md` — held the Phase 2 deep dive; never archived when Phase 2 went green
+  and stale ever since (Phase 5 is done). The learn/ walkthrough for Phase 2 covers it.
+- `phases_docs/` (phase_00, phase_01) — the engineer-to-engineer writeup convention was
+  abandoned after Phase 1; phases 2–5 never got one, and the files claimed "every phase
+  gets one of these". `learn/phase_0N.md` + the code + gates carry the same ground.
+- `docs/random.txt` — a one-line-per-phase summary of the 14-phase plan; duplicated the
+  execution plan and described phases now cut.
+- `learn/phase_03_brief.md`, `phase_04_brief.md`, `phase_05_brief.md` — the "before" docs
+  for steps whose walkthroughs exist; only 3 of 6 phases had one, so the folder was
+  inconsistent.
+
+**Added:** `START_HERE.md` — what the project is, which doc to read when, the authority
+order, the current state, the working loop, the eight remaining steps, the hard rules, the
+commands, and where new files go.
+
+**Protocol change (amends #7):** `CURRENT_PHASE.md` is gone. The active step's plain-language
+brief lives at `learn/<step>_brief.md`; when the step's gate is green the brief is folded
+into `learn/<step>.md` and deleted, so `learn/` keeps one file per step. `STATUS.md` remains
+the state file; `START_HERE.md` is the entry point for humans and AI sessions alike.
+`CLAUDE.md`, `STATUS.md`, `README.md` and `learn/README.md` updated to match.

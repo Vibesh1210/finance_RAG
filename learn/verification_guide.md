@@ -353,3 +353,26 @@ File: `golden/factual_v0.yaml`. Two quick confirmations:
 
 - [ ] Get a free API key at **tiingo.com**, put it in `.env` as `TIINGO_API_KEY`. Then tell me — I run the price backfill and it unblocks the last Phase 2 gate check.
 
+
+---
+
+## Part 7 — How to work through this, and what happens when you're done
+
+**Pace.** Part 1 is one company per sitting (30–45 min each, 10 sittings). Parts 2–5 are
+short. Tick `[x]` as you go — the ticks in this file are the record; nothing else to fill in.
+
+**If a number doesn't match:** don't change anything. Write the value you see next to the
+row, note the filing and page, and tell me. One real mismatch matters more than fifty
+matches — it means a loading bug the whole system depends on catching.
+
+**When every box is ticked, tell me.** Then I:
+1. fill `fixtures/spot_checks.json` (from the template) with the Part 1 figures you confirmed;
+2. load the Part 2 rows into the database as `human_verified=true`;
+3. confirm the Part 4 countersign is set, and run the price backfill with your Tiingo key;
+4. re-run `make gates` — phases 2 and 3 should go fully green;
+5. record the first **frozen baselines** in `golden/thresholds.yaml` and mark the golden
+   bank frozen;
+6. update `STATUS.md`, commit, and tag **`v0.1.0`**.
+
+From that point every "did it improve?" number in the plan is measured against answers
+*you* confirmed — that's what makes the rest of the roadmap mean something.
