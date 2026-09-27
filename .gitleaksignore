@@ -1,0 +1,5 @@
+# False positives: the generic-api-key rule matched ordinary prose in historical docs
+# ("What an API is, …" in learn/README.md; "keyed by accession number, …" in docs/design_us.md).
+# Ignored by exact fingerprint (commit:file:rule:line) so any real key in these files still fails.
+9b045fb8a2aebdb4a222993586fe43b305c1d354:learn/README.md:generic-api-key:47
+48aada5d6e461a9e6a3c95f2d69c952c926fcb4d:docs/design_us.md:generic-api-key:147

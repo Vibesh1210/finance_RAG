@@ -1,11 +1,38 @@
-name: gates
+name: ci
 
 on:
-  push:
   pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# a newer push to the same branch cancels the older, now-pointless run
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  gates:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run ruff check backend/src backend/gates backend/scripts backend/tests
+
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run pytest -q -m "not integration"
+
+  integration:
     runs-on: ubuntu-latest
     services:
       db:
@@ -23,13 +50,28 @@ jobs:
           --health-retries 12
     env:
       DATABASE_URL: postgresql://usrag:usrag@localhost:5432/usrag
-      # CI placeholder proves the config plumbing; the real UA lives in local .env only.
+      # placeholder proves the config plumbing; the real User-Agent lives in local .env only
       SEC_EDGAR_USER_AGENT: US-rag-CI (ci@users.noreply.github.com)
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - run: uv sync
-      # service containers can't mount backend/db/init/, so CI provisions the same extension
-      # explicitly (ADR-0002); the gate itself remains a pure verifier.
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      # service containers can't mount backend/db/init/, so the extension is enabled explicitly (ADR-0002)
       - run: psql "$DATABASE_URL" -c 'CREATE EXTENSION IF NOT EXISTS vector;'
-      - run: uv run python backend/gates/run_all.py
+      - run: uv run pytest -q -m integration
+      # Gates 2-5 need the loaded corpus (facts, embedded chunks); they join CI in E2 via a
+      # frozen data snapshot (ADR-0021). Gate 1 re-runs the whole test suite as one of its checks.
+      - run: uv run python backend/gates/phase_00.py
+      - run: uv run python backend/gates/phase_01.py
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # scan every commit, not just the latest
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
