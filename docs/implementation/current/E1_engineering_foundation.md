@@ -529,7 +529,7 @@ Expected: `lint` ✅ again.
 - [ ] **Step 3: [HUMAN] Decide repository visibility**
 
 Rulesets are only enforced on **public** repos with GitHub Free (or any repo with GitHub Pro — free for students via GitHub Education).
-Before going public, know: (a) the secret scan over the full history is green; (b) commit author metadata (name + email) becomes visible — to hide it for future commits: GitHub → *Settings → Emails → Keep my email addresses private*; (c) `.env` and `blobs/` were never committed.
+Before going public, know: (a) the secret scan over the full history is green; (b) commit author metadata becomes visible: all existing commits carry the real email address, and that is permanent once public (hiding it would need a history rewrite + force-push, before the ruleset exists). To stop exposing it from now on, do **both**: GitHub → *Settings → Emails → Keep my email addresses private* (this also sets the author of squash-merge commits), and locally `git config user.email <id>+Vibesh1210@users.noreply.github.com` (the exact address is shown on that settings page). Don't enable "Block command line pushes that expose my email" until the local config is changed, or your pushes will be rejected; (c) `.env` and `blobs/` were never committed.
 Choose: **public** (recommended — a portfolio repo must be visible anyway), **Pro**, or **stay private** (then protection is a habit, not enforced).
 
 - [ ] **Step 4: [HUMAN] Create the ruleset** (if public or Pro)
@@ -546,7 +546,7 @@ Verify: `git push origin HEAD:main` from any branch → rejected by the ruleset.
 - [ ] **Step 5: [HUMAN] Merge** — on the PR: *Squash and merge* → *Delete branch*. Then locally:
 
 ```bash
-git switch main && git pull && git branch -d e1/engineering-foundation
+git switch main && git pull && git branch -D e1/engineering-foundation   # -D: squash merges don't look "merged" to git
 ```
 
 - [ ] **Step 6: Close E1** — move this file to `docs/implementation/completed/E1_engineering_foundation.md`, mark E1 ✅ in `status.md`, drop the CI-risk bullet — on a new branch `e1/close`, via PR (the first change to use the new flow end to end).

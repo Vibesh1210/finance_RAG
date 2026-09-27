@@ -68,6 +68,23 @@ with connect_ro() as conn:
                as_of=date(2026, 3, 1), generate_fn=gemini_generate)   # prose via Gemini
 ```
 
+## 4b. Working on a change
+
+Every change reaches `main` through a pull request (ADR-0021):
+
+```bash
+git switch main && git pull
+git switch -c l1/tracing            # <step>/<short-name>
+# … edit, then locally:
+make check                          # lint + unit tests (no Docker needed)
+make test-integration               # needs `make up`
+git push -u origin l1/tracing       # then open the pull request on GitHub
+# after the 4 checks are green: "Squash and merge" on GitHub, then delete the branch
+git switch main && git pull && git branch -D l1/tracing   # -D: a squash merge doesn't look "merged" to git
+```
+
+Gates 2–5 don't run in CI yet (E2); run the ones your change touches locally before merging.
+
 ## 5. Configuration
 
 | Variable | Default | Purpose |

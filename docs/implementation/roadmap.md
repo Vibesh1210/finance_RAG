@@ -14,9 +14,13 @@ built today: `docs/production/`. Original design intent (the `§` numbers):
 | Step | Build | Done when |
 |---|---|---|
 | **Now — M0 sign-off** | Verification checklist (`docs/implementation/m0_signoff_checklist.md`) + Tiingo key | Golden bank frozen, baselines recorded, `v0.1.0` tagged |
+| **E1** Branches + CI | Pull-request workflow; four-job CI (lint, unit, integration, secrets); `main` protected | A pull request shows four green checks; a red one blocks merging |
+| **B1** Answer-path fixes | Fix the defects in `docs/production/lld/answering.md` §6 (margin as "$0 million", "growth" answered as revenue, year-to-date under a quarter label, …) | Each defect has a failing test first, now green |
 | **Showcase 1** README | Rewrite `README.md`: the problem, a diagram, M0 results, key design choices, how to run | A stranger understands the project in ~2 minutes without running it |
 | **L1** Observability + cost + answer grading | A trace per question; a quality-and-cost report; an LLM judge for text answers, checked against hand-graded answers | Report shows quality (incl. answer faithfulness) *and* time/tokens/cost per stage |
+| **E2** Eval gates in CI | Frozen DB snapshot (DVC) + pre-computed question embeddings; gates 3–5 run on every pull request | A change that lowers recall or leaks future data cannot merge |
 | **Showcase 2** Demo page + video | Local demo page over `answer()` (answer, sources, trace) + a ~2-minute video in the README | A reviewer sees it working without installing anything |
+| **E3** Releases | Docker image built and published per tagged release | `v0.x` tags produce an image |
 | **L2** Chunking eval | A quote-level answer key + a side-by-side chunk-size experiment | Comparison table + written keep/change decision |
 | **L3** Reranker | Cross-encoder over fused top-20 → top-8, on/off flag | On/off comparison (both answer-key levels) + go/no-go |
 | **L4** GraphRAG POC | Small company-relationship graph, source quote on every edge | One relationship question answered with edge citations |
@@ -258,6 +262,28 @@ number below actually mean something. Tag `v0.1.0`.
   of 8), fine-tune (phase 9), multi-hop agentic (phase 11), or full hardening (phase 13).
 - The archived design (`archive/design_us.md`) keeps the original intent for each subset;
   `docs/production/` describes what is actually built.
+
+## E-track — engineering foundation (ADR-0021)
+
+Thin on purpose: enough that every change is checked automatically, not a DevOps platform.
+Plans live in `docs/implementation/current/` while being built.
+
+- **E1 — branches and CI (before L1).** Trunk-based branches (`<step>/<topic>`), pull
+  requests with a definition-of-done template, and one workflow with four jobs: `lint`,
+  `unit`, `integration` (Postgres service, database tests, gates 0–1), `secrets`. Tests
+  split automatically by the `db_url` fixture. `main` protected by a ruleset.
+- **B1 — answer-path fixes (after E1, before L1).** The known defects in
+  `docs/production/lld/answering.md` §6 — L1 should not measure a system with known
+  answer bugs. Each fix starts with a failing test.
+- **E2 — evaluation gates in CI (right after M0 sign-off).** A frozen database snapshot
+  versioned with DVC, plus pre-computed embeddings for the golden questions, so gates 3–5
+  (recall ratchet, zero look-ahead, exact numbers) run on every pull request. L2's
+  chunk-size experiments are then tracked with DVC too.
+- **E3 — releases (with Showcase 2).** A Docker image built and published for each tagged
+  release. No hosting.
+
+Out of scope: staging/production environments, Kubernetes, infrastructure-as-code,
+monitoring stacks, hosting.
 
 ## Definition of done — every step
 

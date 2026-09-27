@@ -6,8 +6,6 @@ schema mistakes are corrected by new migrations, mirroring U11 for data).
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from us_rag.db import connect
 from us_rag.env import repo_root
 

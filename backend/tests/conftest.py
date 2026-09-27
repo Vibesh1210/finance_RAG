@@ -47,3 +47,13 @@ def company_id(conn):
         return row[0]
 
     return lookup
+
+
+def pytest_collection_modifyitems(config, items):
+    """A test that touches the database — directly via `db_url`, or through `conn` /
+    `company_id`, which depend on it — is an *integration* test; everything else is a
+    *unit* test that runs with no services. Marking by fixture keeps the split automatic:
+    a new DB test is classified correctly without anyone remembering a marker."""
+    for item in items:
+        if "db_url" in getattr(item, "fixturenames", ()):
+            item.add_marker(pytest.mark.integration)
