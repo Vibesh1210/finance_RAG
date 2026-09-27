@@ -4,7 +4,13 @@ on:
   pull_request:
   push:
     branches: [main]
-  workflow_dispatch:
+  workflow_dispatch:        # run by hand from the Actions tab — also a full-history secret scan
+  schedule:
+    - cron: "0 6 * * 1"     # Mondays 06:00 UTC: health check of main + full-history secret scan
+
+# the token each job gets can read the code and nothing else (least privilege)
+permissions:
+  contents: read
 
 # a newer push to the same branch cancels the older, now-pointless run
 concurrency:
@@ -68,10 +74,14 @@ jobs:
 
   secrets:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read   # gitleaks-action lists a pull request's commits to scan them
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # scan every commit, not just the latest
+          fetch-depth: 0   # full history available; PR/push runs scan only their new commits,
+                           # scheduled/manual runs scan every commit ever made
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

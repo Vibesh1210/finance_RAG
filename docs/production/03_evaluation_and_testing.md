@@ -91,10 +91,11 @@ runner with `uv sync --locked` (fails if `pyproject.toml` and `uv.lock` disagree
 | `lint` | `ruff check backend/src backend/gates backend/scripts backend/tests` |
 | `unit` | `pytest -m "not integration"` — 99 tests, no services |
 | `integration` | Postgres 16 + pgvector service, `CREATE EXTENSION vector`, `pytest -m integration` (37), then gates 0 and 1 |
-| `secrets` | gitleaks over the full git history; two prose false positives ignored by fingerprint in `.gitleaksignore` |
+| `secrets` | gitleaks: on a pull request or push, the new commits; on the weekly schedule (Mon 06:00 UTC) or a manual run, the full history. Two prose false positives in old commits ignored by fingerprint in `.gitleaksignore` |
 
-A newer push to the same branch cancels the older run. `main` is protected by a GitHub
-ruleset requiring a pull request and these four checks (enforced on a public repo).
+A newer push to the same branch cancels the older run. The workflow's token is read-only.
+Once the repository is public (or on GitHub Pro), a GitHub ruleset on `main` requires a pull
+request and these four checks; on a private Free repo that rule cannot be enforced.
 
 **Not in CI yet:** gates 2–5 need the loaded corpus (41,175 facts, 7,033 embedded chunks)
 and the bge-m3 model. E2 adds a frozen database snapshot and pre-computed question

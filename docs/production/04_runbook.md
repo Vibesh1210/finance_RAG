@@ -80,7 +80,7 @@ make check                          # lint + unit tests (no Docker needed)
 make test-integration               # needs `make up`
 git push -u origin l1/tracing       # then open the pull request on GitHub
 # after the 4 checks are green: "Squash and merge" on GitHub, then delete the branch
-git switch main && git pull && git branch -d l1/tracing
+git switch main && git pull && git branch -D l1/tracing   # -D: a squash merge doesn't look "merged" to git
 ```
 
 Gates 2–5 don't run in CI yet (E2); run the ones your change touches locally before merging.

@@ -10,8 +10,8 @@ About 15 minutes. Engineering twin: `docs/production/03_evaluation_and_testing.m
 
 ## 1. The problem — a red light that is always red
 
-On 2026-09-26 the automatic checks on GitHub had been failing on every push. Not because
-the code was broken — because of three things that had nothing to do with the code:
+Until 2026-09-27 the automatic checks on GitHub were set up so they *could not pass* — not
+because the code was broken, but because of three things that had nothing to do with the code:
 
 ```
   GitHub's check machine had…            so…
@@ -68,7 +68,7 @@ the project exactly as locked in `uv.lock`, and runs one thing:
 | `lint` | `ruff check` — reads the code without running it | unused imports, obvious mistakes | nothing |
 | `unit` | the 99 tests that need nothing but Python | logic bugs in pure functions (RRF, the verifier, fiscal parsing …) | nothing |
 | `integration` | starts Postgres, runs the 37 database tests, then gates 0 and 1 | broken migrations, the append-only trigger, as-of reads, seeds | a database service |
-| `secrets` | gitleaks over **every commit ever made** | an API key accidentally committed | the full git history |
+| `secrets` | gitleaks over the **new commits** in the pull request — and every Monday over **every commit ever made** | an API key accidentally committed | the git history |
 
 ### How a test knows it's "integration" — `backend/tests/conftest.py`
 
@@ -94,7 +94,7 @@ of a forgotten library can't happen silently. That's precisely the `pyyaml` prob
 ### Merge — and why `main` is protected
 
 When all four are green you press **Squash and merge**: the branch's commits become one
-tidy commit on `main`. A GitHub **ruleset** on `main` makes this the *only* way in: no
+tidy commit on `main`. Once the repo is public, a GitHub **ruleset** on `main` makes this the *only* way in: no
 direct pushes, no merging while a check is red.
 
 ---

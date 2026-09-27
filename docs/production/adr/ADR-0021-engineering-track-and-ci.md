@@ -22,7 +22,8 @@ Add a thin engineering track alongside the L-steps:
   short-lived branches named `<step>/<topic>` and is squash-merged by pull request. One
   workflow runs four independent jobs: `lint` (ruff), `unit` (tests needing no services),
   `integration` (a Postgres + pgvector service; database tests; gates 0 and 1), and
-  `secrets` (gitleaks over the full history). Tests are split automatically: a test that
+  `secrets` (gitleaks over each pull request's or push's new commits, and over the full
+  history weekly and on manual runs). Tests are split automatically: a test that
   uses the `db_url` fixture (directly or via `conn` / `company_id`) is marked
   `integration`. `pyyaml` is declared; CI installs with `uv sync --locked`. A GitHub
   ruleset on `main` requires a pull request and the four checks.
