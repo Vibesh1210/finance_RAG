@@ -26,7 +26,6 @@ import psycopg
 from us_rag.entities import resolve_one
 from us_rag.query.metrics import (
     Abstention,
-    MetricResult,
     derived_margin,
     metric_compare,
     metric_value,

@@ -1,4 +1,4 @@
-.PHONY: up down sync migrate seed test gate gates verify-live
+.PHONY: up down sync migrate seed test test-unit test-integration lint check gate gates verify-live
 
 PHASE ?= 0
 PHASE_PADDED = $(shell printf '%02d' $(PHASE))
@@ -20,6 +20,17 @@ seed:
 
 test:
 	uv run pytest -q
+
+test-unit:
+	uv run pytest -q -m "not integration"
+
+test-integration:
+	uv run pytest -q -m integration
+
+lint:
+	uv run ruff check backend/src backend/gates backend/scripts backend/tests
+
+check: lint test-unit
 
 gate:
 	uv run python backend/gates/phase_$(PHASE_PADDED).py
