@@ -1,7 +1,7 @@
 # Status — where the project is right now
 
 State only; never an authority on design or plan. Updated at every step change and
-whenever a blocker changes (ADR-0007). Last updated: **2026-09-26**.
+whenever a blocker changes (ADR-0007). Last updated: **2026-09-27**.
 
 ## The steps
 
@@ -40,7 +40,24 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
 - Tiingo key in `.env` (gate 2 check 5)
 - Review the metric registry; confirm the golden bank
 
+**Known correctness bugs (found 2026-09-27; fix as a small step after E1, before L1):**
+- **Margin rendered as dollars, uncited.** "What was Apple's gross margin for fiscal year
+  2025?" routes to the numbers lane; `derived_margin` returns a ratio (0.469…), which
+  `_as_reported` formats as `$0 million`, and the answer carries no citation (derived
+  results have none). Confirmed by running `_as_reported(Decimal("0.4690516"), "ratio")`.
+  Not caught by gate 5 (no golden question asks a margin through `answer()`).
+- **Unsupported intent answered as a different question.** "Apple's revenue *growth* for
+  FY2025" routes to the numbers lane and returns total revenue — `extract_metric_key`
+  ignores "growth". Confirmed via `classify` + `extract_metric_key`.
+- **To confirm with the database** (from `frontend/docs/interview_ui_design.md` §14):
+  `metric_value`'s `exact or rows` fallback can return a year-to-date value under a quarter
+  label; Q4 answers cite only the FY filing, not all four inputs; a comparison whose every
+  leg abstains still returns status `answered`.
+
 **Engineering housekeeping (mine):**
+- Additional isolated reproduction on 2026-09-27 confirms the quarter/YTD fallback
+  defect with synthetic H1-only input; the growth dispatch and margin answer failures
+  were also reproduced through `_metric_answer`. Live-corpus checks remain pending.
 - PostgreSQL remains unavailable on 2026-09-26. After the backend/frontend directory
   split, 99 database-independent tests pass; 37 database tests were not run. Gate 0
   passes four checks and fails only the database connection check. Compose configuration,
@@ -52,6 +69,10 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
 
 ## Recent changes
 
+- **2026-09-27** — UI review incorporated into a [reduced v1 proposal](../../frontend/docs/interview_ui_v1.md):
+  three simple pages, a curated J&J comparison, and video backup. Extended design retained
+  as reference; Streamlit preferred but framework choice remains open. Known numeric
+  answer defects documented in the answering LLD; application code unchanged.
 - **2026-09-26** — backend code, tests, database definitions, gates, and scripts moved
   under `backend/`; UI design moved to `frontend/docs/`. Root commands/configuration and
   shared datasets retained; path updates recorded in ADR-0022. No frontend implemented.

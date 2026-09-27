@@ -12,7 +12,7 @@ exact, sourced answers — or an honest "I can't answer that, because…".
 | Know why something is the way it is | [docs/production/adr/README.md](docs/production/adr/README.md) |
 | Run it | [docs/production/04_runbook.md](docs/production/04_runbook.md) |
 | Find the backend code and commands | [backend/README.md](backend/README.md) |
-| Review the interview frontend design | [frontend/docs/interview_ui_design.md](frontend/docs/interview_ui_design.md) |
+| Review the interview frontend design | [frontend/docs/interview_ui_v1.md](frontend/docs/interview_ui_v1.md) |
 | Do your sign-off checks | [docs/implementation/m0_signoff_checklist.md](docs/implementation/m0_signoff_checklist.md) |
 
 ```

@@ -105,3 +105,19 @@ templated by code. **Numbers inside Gemini prose are not verified** — see HLD 
 
 Every `answered` text ends with: *"This is sourced information for decision support, not
 investment advice."* Refusals and clarifications don't.
+
+## 6. Known correctness defects (2026-09-27)
+
+These are open defects, reproduced with synthetic backend results and mocked lookups.
+They are not live-corpus measurements and have not been fixed by the frontend review.
+
+| Trigger | Current behavior | Required regression / correction |
+|---|---|---|
+| Apple gross margin for FY2025, executor ratio 0.47 | `_as_reported` renders `$0 million`; derived result has no direct citation, so the answer has none | Render ratio as a percentage and expose input citations; check final answer text and sources |
+| Apple revenue growth for FY2025 | Metric extraction selects `revenue`; `_metric_answer` calls `metric_value` and answers the revenue level | Recognize unsupported calculation intent and abstain/clarify, or bind the correct deterministic calculation explicitly |
+| Quarter request with only a matching-end-date YTD fact | `metrics.metric_value` uses `exact or rows` and returns the cumulative value under the quarter label | Require matching duration, or an explicit supported derivation; never silently relabel a YTD fact |
+
+Existing numeric gates primarily compare executor values on their reference questions;
+they do not establish correct rendered units, citations, or intent handling for these
+cases. Fixes need focused answer-path coverage. Comparison results with all abstaining
+legs and complete Q4 input provenance also need inspection before the live demo.

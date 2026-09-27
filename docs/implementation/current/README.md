@@ -7,7 +7,7 @@ task list, and the gate it must pass. Written before building starts; moved to
 | Document | State |
 |---|---|
 | [E1 engineering foundation](E1_engineering_foundation.md) | Engineering workflow and CI implementation plan |
-| [Showcase 2 interview UI design](../../../frontend/docs/interview_ui_design.md) | Proposal for review: query/evidence, metrics/evaluations, HLD/LLD, and deeper demo views |
+| [Showcase 2 interview UI v1](../../../frontend/docs/interview_ui_v1.md) | Reduced proposal after review: three pages and a curated J&J comparison; extended design deferred |
 
 L1's detailed observability plan is still to be written. A proposal listed here does not
 change the implementation order or mark a capability as built.

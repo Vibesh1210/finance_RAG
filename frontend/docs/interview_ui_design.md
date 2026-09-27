@@ -1,9 +1,15 @@
-# Showcase 2 — Interview UI design for review
+# Showcase 2 — Extended interview UI design reference
 
-**Status:** Proposal for review; no frontend or adapter is implemented by this document.  
+**Status:** Extended reference, deferred from v1; no frontend or adapter is implemented.
 **Date:** 2026-09-26  
 **Audience:** The presenter and an interviewer watching the application on the presenter's laptop.  
 **Working title:** Financial Research Desk.
+
+**Review update — 2026-09-27:** Start with the [reduced v1 proposal](interview_ui_v1.md).
+The original design below is retained for its interview framing and evidence contracts.
+Its React/FastAPI stack, endpoint suite, replay engine, five-page scope, and delivery
+checklist are not requirements for the first demo. V1 proposes three simple pages and
+one curated J&J comparison, with Streamlit preferred and the framework choice still open.
 
 **Location:** Frontend-specific design lives in `frontend/docs/`. Python implementation
 lives in `backend/`; shared project docs and configuration remain at the repository root
