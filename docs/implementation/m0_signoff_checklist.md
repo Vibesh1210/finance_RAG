@@ -330,6 +330,13 @@ File: `golden/factual_v0.yaml`. Two quick confirmations:
 
 **(a) 26 'find the passage' questions** — for a sample, confirm the cited section (e.g. 'Item 1A' = Risk Factors, 'Item 7' = management discussion) is where that answer would live. You don't read the whole thing — just sanity-check the section is right.
 
+**(a2) One gold passage flagged for you (2026-09-28, from I1):** `F14` — *What did Deere report
+for its Production and Precision Agriculture segment in fiscal 2025?* — accepts only Deere's
+FY2025 10-K Item 7. Search now finds Deere's **Q4 FY2025 earnings release / call slides**
+(8-K `0001104659-25-116130`, EX-99.1 and EX-99.2) first, and they state the full-year segment
+results. Decide:
+- [ ] keep Item 7 only, **or** add those two exhibits as acceptable gold passages for F14
+
 **(b) 14 'should refuse' questions** — confirm each is genuinely unanswerable or ambiguous given our data (we have no analyst targets, no intraday prices, no Tesla, etc.):
 
 - [ ] `F21` — *Compare JPMorgan's gross margin to Apple's for fiscal 2025.* → should **clarify**

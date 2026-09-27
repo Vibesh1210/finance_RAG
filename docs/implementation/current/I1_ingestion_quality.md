@@ -56,9 +56,10 @@ Measured on 2026-09-27: 4 filings × ~105 chunks ≈ **420 chunks with the wrong
 
 - **Search quality:** a question about market risk gets pages of unrelated text; a
   question about JPMorgan's business results may find the right text under the wrong label.
-- **Scores are unfair:** test questions F14 (Deere) and F15 (JPMorgan) expect "Item 7".
-  If their answers sit under the wrong "Item 7A" label, search finds them but they're
-  graded as misses.
+- **Scores could be unfair:** test questions F14 (Deere) and F15 (JPMorgan) expect "Item 7".
+  If their answers sat under the wrong "Item 7A" label, search would find them but grade
+  them as misses. *(Checked before the rebuild: both already scored 1.0 — the right "Item 7"
+  chunks were found anyway. So the harm was noise and wrong labels, not these two scores.)*
 - **Timing:** your sign-off freezes the score baselines. Fixing chunks *after* the freeze
   would mean re-baselining. So fix first.
 
@@ -150,4 +151,46 @@ for the three shapes this bug took: **overlapping sections**, **market risk bigg
 MD&A**, **a section opening with a contents list**. (Plain "too big" isn't a rule: JPM's MD&A
 is genuinely long.) On the old data it **fails with 11 problems** — exactly the filings above.
 
-### 6.4 Rebuild + before/after — *in progress*
+### 6.4 Rebuild + before/after (2026-09-28)
+
+**Rebuild:** the 11 changed filings' chunks were backed up (1,321 rows, text + vectors, so it
+can be undone), deleted, re-chunked and re-embedded → 1,325 new chunks; index 7,033 → 7,037.
+Every changed section matched the prediction exactly; no other section moved.
+
+**Guard:** gate 2 check 4b went from **11 problems → PASS**. Gates 2, 3, 5 otherwise unchanged
+(2 and 3 red only on your sign-off items; gate 5 7/7; zero look-ahead leaks).
+
+**Search scores (provisional answer key, 26 questions):**
+
+| | recall@10 before → after | MRR | nDCG@10 |
+|---|---|---|---|
+| fused | 0.7115 → **0.6731** | 0.4106 → 0.4010 | 0.4771 → 0.4605 |
+| dense | 0.6346 → 0.6346 | 0.3345 → 0.3346 | 0.3900 → 0.3900 |
+| keyword | 0.1538 → 0.1154 | 0.1538 → 0.1154 | 0.1538 → 0.1154 |
+
+The whole drop is **one question, F14** ("What did Deere report for its Production and
+Precision Agriculture segment in fiscal 2025?"), 1.0 → 0.0. Why:
+
+```
+BEFORE  Deere's "Item 7" = MD&A + the financial statements + notes (mislabelled)
+        → segment tables from the NOTES matched the question, labelled "Item 7" → counted as a hit
+AFTER   Deere's "Item 7" = only the real MD&A
+        → search now ranks higher Deere's Q4 FY2025 earnings press release and call slides
+          (8-K EX-99.1 / EX-99.2, "Production & Precision Ag", full-year results) — arguably
+          the better source — but F14's answer key accepts ONLY the 10-K Item 7 → counted as misses
+```
+
+So the measurement became **more honest**, not the system worse: the old hit came from
+mislabelled text, and F14's answer key is too narrow. **Not changed here** — correcting an
+answer key is your sign-off call; flagged in `../m0_signoff_checklist.md` Part 5.
+
+**Two lessons worth keeping:**
+1. *A bug can inflate a score.* Fixing data can lower a number that was never real.
+2. *Press releases compete with the filings.* 41% of all chunks are 8-K exhibits; for F14 the
+   top 9 results are press releases and earnings slides. Whether that's good (they're direct,
+   dated answers) or bad (they crowd out the 10-K) is a question for L2 (chunking) and L3
+   (reranker) — and for how many acceptable passages each test question should list.
+
+### 6.5 Still open in I1
+- **Item 8 (financial-statement notes):** not extracted today — decide add vs. record why not.
+- Merge: branch `i1/ingestion-quality` → pull request → `main`.

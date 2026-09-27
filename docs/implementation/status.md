@@ -1,7 +1,7 @@
 # Status — where the project is right now
 
 State only; never an authority on design or plan. Updated at every step change and
-whenever a blocker changes (ADR-0007). Last updated: **2026-09-27**.
+whenever a blocker changes (ADR-0007). Last updated: **2026-09-28**.
 
 ## The steps
 
@@ -67,6 +67,13 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
 
 ## Recent changes
 
+- **2026-09-28** — Project Explorer delivery split into five reviewable phases at the
+  user's request. First preview: shared layout and one complete Sources lesson;
+  review before expanding. Planning only; no application code changed.
+- **2026-09-27** — [Project Explorer learning-website plan](../../frontend/docs/project_explorer_design.md)
+  added for review: source-to-answer lessons, worked examples, HLD/LLDs, and a complete
+  documentation/diagram library. Proposed as a static local site, separately from the
+  live interview demo; no application code changed and backend roadmap unchanged.
 - **2026-09-27** — UI review incorporated into a [reduced v1 proposal](../../frontend/docs/interview_ui_v1.md):
   three simple pages, a curated J&J comparison, and video backup. Extended design retained
   as reference; Streamlit preferred but framework choice remains open. Known numeric
