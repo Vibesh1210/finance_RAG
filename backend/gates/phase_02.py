@@ -181,6 +181,32 @@ def check_narrative() -> None:
             raise AssertionError("no EX-99 chunks found — narrative pass over 8-K exhibits missing")
 
 
+def check_section_audit() -> None:
+    """I1: every stored 10-K/10-Q passes the structural section audit (no overlapping
+    sections, market-risk not larger than MD&A, no section opening with a contents list).
+    Hand-checking 3 filings (check 4) missed JPM's and DE's runaway sections."""
+    from us_rag.ingest.section_audit import audit_sections
+
+    failures = []
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT t.ticker, c.accession, c.section, c.text FROM chunks c"
+            " JOIN documents d USING (accession) JOIN tickers t ON t.company_id = c.company_id"
+            " WHERE d.form IN ('10-K', '10-Q', '10-K/A', '10-Q/A')"
+            " ORDER BY c.accession, c.section, c.chunk_id"
+        ).fetchall()
+    filings: dict[tuple[str, str], dict[str, list[str]]] = {}
+    for ticker, accession, section, text in rows:
+        paragraphs = filings.setdefault((ticker, accession), {}).setdefault(section, [])
+        for paragraph in text.split("\n"):  # chunks are paragraphs joined by newlines;
+            if paragraph not in paragraphs[-3:]:  # skip the overlap carried between chunks
+                paragraphs.append(paragraph)
+    for (ticker, accession), sections in filings.items():
+        failures += [f"{ticker} {accession}: {p}" for p in audit_sections(sections)]
+    if failures:
+        raise AssertionError(f"{len(failures)} section problem(s): " + " | ".join(failures[:8]))
+
+
 # ---------- check 5: prices [KEY: TIINGO] ----------
 
 
@@ -335,6 +361,7 @@ run_gate(
         ("2. 20 spot-check facts match loaded facts exactly [HUMAN]", check_spot_checks),
         ("3. fiscal calendars: full FY+Q coverage; DE FY2025 53-week resolved", check_fiscal_calendars),
         ("4. narrative: Items 1A/7 boundaries on 3 filings; Ex-99 chunked", check_narrative),
+        ("4b. section audit: all 10-K/10-Q sections structurally sound (I1)", check_section_audit),
         ("5. prices: no >3-day gaps; NVDA split present [KEY: TIINGO]", check_prices),
         ("6. zero fair-access violations; UA-without-email fatal", check_fair_access),
         ("7. U13: every row preliminary + human_verified; knowledge_time precedes periodic [HUMAN+2e]", check_u13),
