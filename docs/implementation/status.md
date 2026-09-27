@@ -10,6 +10,7 @@ whenever a blocker changes (ADR-0007). Last updated: **2026-09-28**.
 | — | **M0** (phases 0–5) | The first working version: data, search, numbers, answering | ✅ built; gates 0, 1, 4, 5 green; 2 at 5/9, 3 at 4/5 (human items) |
 | 1 | **M0 sign-off** | You check the answer key against the filings; Tiingo key; freeze baselines; tag `v0.1.0` | ⏳ 0 / 159 checklist items ticked |
 | — | **E1** — branches, pull requests, four-job CI | Engineering foundation (ADR-0021) | ▶ **in progress** — branch `e1/engineering-foundation` |
+| — | **I1** — ingestion quality (section boundaries) | Fix JPM/DE/XOM section boundaries; audit every filing | ▶ fix + rebuild done on branch `i1/ingestion-quality`; merge pending |
 | — | **B1** — answer-path fixes | The defects listed under "Known correctness bugs" | ⏳ after E1, before L1 |
 | 2 | Showcase 1 — README | Front page with real numbers | ⏳ after sign-off |
 | 3 | **L1** — observability, cost, answer grading | Trace per question; quality + cost report; LLM judge for prose | ⏳ after B1 (in parallel with sign-off; scores stay provisional until then) |
@@ -59,13 +60,17 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
   leg abstains still returns status `answered`.
 
 **Engineering housekeeping (mine):**
-- 2026-09-27: database up again; after the backend/frontend split, 136/136 tests pass and
-  gates 0, 1, 4, 5 are green (2 and 3 unchanged: human items).
-- CI: being fixed in E1 (four jobs; gates 2–5 join in E2) — remove this line when E1's
-  pull request is green.
+- 2026-09-28: 7,037 chunks (I1 rebuild); 144 tests pass; gates 0, 1, 4, 5 green; 2 and 3 red on human items only.
+- CI: E1 merged (PR #1, #2); four jobs green on `main`. Parked by you: the `protect-main`
+  ruleset + squash-only setting, and moving the E1 plan to `completed/`. Gates 2–5 join CI in E2.
 - U13 extraction covers only 3 of 10 companies (free-tier quota).
 
 ## Recent changes
+
+- **2026-09-28** — I1: caption-fallback section boundaries fixed (11 filings rebuilt: JPM MD&A
+  now complete, DE/JPM runaway "Item 7A" gone, XOM contents list removed); new section audit
+  (gate 2 check 4b) passes on all 80 filings. Provisional fused recall@10 0.7115 → 0.6731, all
+  from F14, whose old hit came from mislabelled text — F14's answer key flagged for sign-off.
 
 - **2026-09-28** — Project Explorer delivery split into five reviewable phases at the
   user's request. First preview: shared layout and one complete Sources lesson;
