@@ -26,6 +26,9 @@ line-length = 100
 
 [tool.pytest.ini_options]
 testpaths = ["backend/tests"]
+markers = [
+    "integration: needs the Postgres test database (auto-applied in backend/tests/conftest.py)",
+]
 
 [build-system]
 requires = ["hatchling"]
