@@ -21,3 +21,5 @@ def load_env(path: Path | None = None) -> None:
             continue
         key, _, value = line.partition("=")
         os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+import json
