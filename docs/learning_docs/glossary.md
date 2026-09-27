@@ -365,3 +365,31 @@ ADR-0014 is "the router uses rules, not an AI".
 **Accession number** in citations — the long ID in brackets after a number, e.g.
 `[0000320193-25-000079 · FY2025 · as-of 2026-03-01]` = which filing, which period, and the
 as-of date the answer was computed for.
+
+## Terms for how changes get checked (added 2026-09-27, E1)
+
+**Branch** — A separate copy of the code where you make a change without touching `main`.
+*Ours:* named `<step>/<topic>`, e.g. `e1/engineering-foundation`.
+
+**Pull request (PR)** — Asking GitHub to merge a branch into `main`. The page shows the
+changes, a checklist, and the automatic checks.
+
+**Squash merge** — Merging a branch as one single commit on `main`, however many commits
+the branch had.
+
+**Workflow / job / runner** — A *workflow* is the recipe of checks GitHub runs
+(`.github/workflows/ci.yml`). Each independent check in it is a *job*. Each job runs on a
+fresh, empty machine called a *runner*.
+
+**Lint** — Checking code by reading it, without running it (unused imports, obvious
+mistakes). *Ours:* `ruff`, via `make lint`.
+
+**Lockfile** — A file recording the exact version of every library (`uv.lock`), so every
+machine installs the same thing. `uv sync --locked` refuses to run if it's out of date.
+
+**Ruleset (branch protection)** — A GitHub rule on `main`: changes only by pull request,
+and only when the required checks are green.
+
+**Unit vs integration test** — A *unit* test checks one piece of logic with nothing else
+running (99 of ours). An *integration* test checks pieces working together — ours need a
+real Postgres database (37).

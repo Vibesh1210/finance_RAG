@@ -9,8 +9,12 @@ whenever a blocker changes (ADR-0007). Last updated: **2026-09-27**.
 |---|---|---|---|
 | — | **M0** (phases 0–5) | The first working version: data, search, numbers, answering | ✅ built; gates 0, 1, 4, 5 green; 2 at 5/9, 3 at 4/5 (human items) |
 | 1 | **M0 sign-off** | You check the answer key against the filings; Tiingo key; freeze baselines; tag `v0.1.0` | ⏳ 0 / 159 checklist items ticked |
+| — | **E1** — branches, pull requests, four-job CI | Engineering foundation (ADR-0021) | ▶ **in progress** — branch `e1/engineering-foundation` |
+| — | **B1** — answer-path fixes | The defects listed under "Known correctness bugs" | ⏳ after E1, before L1 |
 | 2 | Showcase 1 — README | Front page with real numbers | ⏳ after sign-off |
-| 3 | **L1** — observability, cost, answer grading | Trace per question; quality + cost report; LLM judge for prose | ▶ **next to build** (in parallel with sign-off; scores stay provisional until then) |
+| 3 | **L1** — observability, cost, answer grading | Trace per question; quality + cost report; LLM judge for prose | ⏳ after B1 (in parallel with sign-off; scores stay provisional until then) |
+| — | E2 — evaluation gates in CI | Frozen snapshot (DVC) so gates 3–5 run on pull requests | ⏳ after sign-off |
+| — | E3 — releases | Docker image per tagged release | ⏳ with Showcase 2 |
 | 4 | Showcase 2 — demo page + video | Local page over `answer()` | ⏳ after L1 |
 | 5 | L2 — chunking evaluation | Quote-level answer key; four chunk-size variants | ⏳ |
 | 6 | L3 — reranker | Cross-encoder second pass, on/off, measured | ⏳ |
@@ -55,17 +59,11 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
   leg abstains still returns status `answered`.
 
 **Engineering housekeeping (mine):**
-- Additional isolated reproduction on 2026-09-27 confirms the quarter/YTD fallback
-  defect with synthetic H1-only input; the growth dispatch and margin answer failures
-  were also reproduced through `_metric_answer`. Live-corpus checks remain pending.
-- PostgreSQL remains unavailable on 2026-09-26. After the backend/frontend directory
-  split, 99 database-independent tests pass; 37 database tests were not run. Gate 0
-  passes four checks and fails only the database connection check. Compose configuration,
-  package/data paths, the dependency lockfile, and current documentation links validate.
-- CI risks: empty CI database, `pyyaml` not declared, bge-m3 not installed in CI
-  ([03_evaluation_and_testing.md §6](../production/03_evaluation_and_testing.md)).
+- 2026-09-27: database up again; after the backend/frontend split, 136/136 tests pass and
+  gates 0, 1, 4, 5 are green (2 and 3 unchanged: human items).
+- CI: being fixed in E1 (four jobs; gates 2–5 join in E2) — remove this line when E1's
+  pull request is green.
 - U13 extraction covers only 3 of 10 companies (free-tier quota).
-- `.serena/` (editor tool config) is committed; consider gitignoring it.
 
 ## Recent changes
 

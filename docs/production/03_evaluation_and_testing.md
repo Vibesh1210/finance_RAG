@@ -18,7 +18,10 @@ golden bank (golden/)    60 + 25 questions with known answers       "is the syst
   seeds at the start of every session, so every run also tests the migrations. Each test's
   connection rolls back, which keeps tests isolated without breaking the append-only
   trigger.
-- Run: `make test`.
+- Tests are split automatically (`backend/tests/conftest.py`): a test that uses the `db_url`
+  fixture — directly or via `conn` / `company_id` — is marked `integration`.
+  `make test-unit` runs the 99 unit tests with no services; `make test-integration` runs the
+  37 database tests (needs `make up`); `make test` runs both; `make check` = lint + unit.
 
 ## 2. Phase gates
 
@@ -78,21 +81,25 @@ For each question, run both retrieval legs at its `as_of` across all companies a
 any chunk with `knowledge_time > as_of`. Also counts how many questions have future chunks
 to exclude, so the test fails if it ever becomes vacuous. Current: 0 leaks.
 
-## 6. CI (`.github/workflows/ci.yml`)
+## 6. CI (`.github/workflows/ci.yml`) — ADR-0021
 
-On every push: Postgres + pgvector service, `uv sync`, enable the extension,
-`backend/gates/run_all.py`.
+Runs on every pull request and every push to `main`. Four independent jobs, each on a fresh
+runner with `uv sync --locked` (fails if `pyproject.toml` and `uv.lock` disagree):
 
-**Known risks (unverified — the repo is private, so run results couldn't be checked from
-here):**
-- The CI database is empty, so any gate that needs loaded data (2, 3, 4, 5) cannot pass
-  there. CI can at most prove gates 0–1.
-- `pyyaml` is not a declared dependency; it arrives only through the optional `embed`
-  group, which `uv sync` doesn't install by default. Modules that import `yaml`
-  (`eval/golden.py`, the registry seed) would fail to import in CI.
-- The bge-m3 model is not installed in CI.
+| Job | Runs |
+|---|---|
+| `lint` | `ruff check backend/src backend/gates backend/scripts backend/tests` |
+| `unit` | `pytest -m "not integration"` — 99 tests, no services |
+| `integration` | Postgres 16 + pgvector service, `CREATE EXTENSION vector`, `pytest -m integration` (37), then gates 0 and 1 |
+| `secrets` | gitleaks over the full git history; two prose false positives ignored by fingerprint in `.gitleaksignore` |
 
-Tracked in `docs/implementation/status.md`.
+A newer push to the same branch cancels the older run. `main` is protected by a GitHub
+ruleset requiring a pull request and these four checks (enforced on a public repo).
+
+**Not in CI yet:** gates 2–5 need the loaded corpus (41,175 facts, 7,033 embedded chunks)
+and the bge-m3 model. E2 adds a frozen database snapshot and pre-computed question
+embeddings so gates 3–5 can run on every pull request. Until then, run them locally
+(`make gate PHASE=N`); the pull-request template reminds you.
 
 ## 7. Not measured yet
 

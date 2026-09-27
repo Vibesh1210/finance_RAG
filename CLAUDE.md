@@ -30,6 +30,10 @@ Hard rules (violations fail gates):
 - EDGAR client: never bypass the rate limiter; never remove the User-Agent.
 - CI is fixtures-only: no external data-API calls in gates.
 
+Git workflow (ADR-0021): work on a branch named `<step>/<topic>`; never commit to `main`
+directly; merge by pull request with all four CI checks green (lint, unit, integration,
+secrets). Run `make check` before pushing.
+
 Protocol for a step: write its plan in docs/implementation/current/<step>.md; implement to
 its gate (backend/gates/<step>.py, wired into `make gate`); all earlier gates stay green; any
 deviation or choice is a new ADR in docs/production/adr/; update the LLD of every component

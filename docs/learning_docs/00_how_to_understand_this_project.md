@@ -302,7 +302,8 @@ understand; open the production doc when you want the exact detail.
 | 05 | The words lane | meaning search vs keyword search, merging rankings | `production/lld/retrieval.md` | `query/retrieve.py` |
 | 06 | Answering | the router, the templates, the checker, refusing well | `production/lld/answering.md` | `query/router.py`, `generate.py`, `verify.py` |
 | 07 | Measuring it | test questions, recall scores, automatic checks | `production/03_evaluation_and_testing.md` | `eval/`, `golden/`, `backend/gates/` |
-| 08+ | One per new step: observability (L1), chunking (L2), reranking (L3), graphs (L4), monitoring (L5) | | new LLDs as they're built | |
+| 08 | **How changes get checked** | branches, pull requests, CI, unit vs integration tests | `production/03_evaluation_and_testing.md` §6 | `.github/`, `backend/tests/conftest.py` |
+| 09+ | One per new step: observability (L1), chunking (L2), reranking (L3), graphs (L4), monitoring (L5) | | new LLDs as they're built | |
 | — | **Project story** (`project_story.md`) | how to explain and defend the project; answers to the hard questions | `production/01_overview.md` | — |
 
 Status: **00 written.** 01–07 are written one at a time, each reviewed with you before the
