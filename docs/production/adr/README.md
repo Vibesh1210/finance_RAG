@@ -32,6 +32,7 @@ Scope (what is and isn't built) · Process (how we work) · Operations (running 
 | [ADR-0020](ADR-0020-corpus-selection-and-load-scope.md) | Corpus selection, facts load scope, and Q4 calendar closure (recorded retroactively) | Data | Accepted | 2026-09-26 |
 | [ADR-0021](ADR-0021-engineering-track-and-ci.md) | Engineering track (E1–E3); branches, pull requests and a four-job CI | Process | Accepted | 2026-09-27 |
 | [ADR-0022](ADR-0022-backend-frontend-layout.md) | Backend code under `backend/`; frontend design and future UI under `frontend/` | Architecture | Accepted | 2026-09-26 |
+| [ADR-0023](ADR-0023-i1-section-boundaries-item8-deferred.md) | I1 inserted before sign-off; its guard lives in gate 2; Item 8 notes not extracted | Scope | Accepted | 2026-10-23 |
 
 
 ## Writing a new ADR

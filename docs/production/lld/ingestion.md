@@ -70,7 +70,7 @@ CLI: `uv run python -m us_rag.ingest.facts_load [--tickers …]`.
 ```
 HTML ─blocks_from_html─► text blocks (drops ix:header, script, style, display:none)
      ─find_headings────► "Item 1A", "Part II Item 1A", … (TOC rows and page-numbered lines rejected)
-     ─extract_*_sections► section → paragraphs
+     ─extract_*_sections► section → paragraphs (Item headings first; caption fallback if no body)
      ─chunk_paragraphs─► chunks (≤ ~800 est. tokens, ~100 overlap, never crossing a section)
      ─INSERT chunks────► with knowledge_time = filing acceptance
 embed_missing ─────────► bge-m3 vectors for chunks with embedding IS NULL
@@ -81,6 +81,32 @@ embed_missing ─────────► bge-m3 vectors for chunks with embe
 | 10-K | Item 1, Item 1A, Item 7, Item 7A |
 | 10-Q | Part I Item 2 (MD&A), Part I Item 3, Part II Item 1A (Risk Factors) |
 | 8-K | EX-99.* exhibit bodies, whole (never the 8-K boilerplate) |
+
+Not kept: 10-K Item 8 and 10-Q Part I Item 1 (financial statements and notes). Their
+numbers come from XBRL facts; the notes' text is deferred to L2 (ADR-0023).
+
+**Caption fallback (P-US-2).** JPM, DE and XOM list Items 7/7A with only a page
+reference, so the Item pass finds no body. The section is then located by its caption
+("Management's discussion and analysis…", "Market risk") and cut until a stop caption:
+the market-risk caption (MD&A only), or the start of the financial statements ("Financial
+statements and supplementary data", "Index to financial statements", "Report of
+Independent Registered Public Accounting Firm", or the income statement titled either
+"Consolidated statements of income" or Deere's "Statements of consolidated income").
+Three rules added in I1 keep it from running away:
+1. a caption followed within two lines by a link or a page reference ("46", "133-142")
+   is a contents or index row, not a section start;
+2. a caption section also stops at the next Item heading the Item pass already found;
+3. stop captions may end in a full stop.
+
+Under these rules, JPM's and DE's market risk has no separate Item 7A: it is a
+subsection inside the MD&A (JPM) or a one-paragraph pointer to it (DE).
+
+**Section audit — `ingest/section_audit.py`.** A pure function over one filing's
+{section: paragraphs}, run over every stored 10-K/10-Q by gate 2 check 4b. It flags
+the three shapes the I1 bug took: **overlap** (two sections share >20% of their prose
+paragraphs), **inverted** (market risk larger than its MD&A), and **contents** (a
+section opening with ≥2 page references in its first six paragraphs). Size alone is not
+a rule: JPM's MD&A is legitimately long.
 
 **Chunker:** greedy packing of paragraphs up to `TARGET_TOKENS = 800`; an oversized
 paragraph is split into sentences; on overflow, the last ~`OVERLAP_TOKENS = 100` of the

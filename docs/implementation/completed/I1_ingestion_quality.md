@@ -1,6 +1,6 @@
 # I1 — Ingestion quality: fixing section boundaries
 
-**Status:** in progress (branch `i1/ingestion-quality`) · started 2026-09-27
+**Status:** done 2026-10-23 (branch `i1/ingestion-quality`, merged by pull request) · started 2026-09-27
 
 > **Read this first.** Sections 1–5 explain in plain words what's wrong and what we're
 > doing about it. Section 6 is filled in as the work happens — come back to it for what I
@@ -191,6 +191,21 @@ answer key is your sign-off call; flagged in `../m0_signoff_checklist.md` Part 5
    dated answers) or bad (they crowd out the 10-K) is a question for L2 (chunking) and L3
    (reranker) — and for how many acceptable passages each test question should list.
 
-### 6.5 Still open in I1
-- **Item 8 (financial-statement notes):** not extracted today — decide add vs. record why not.
-- Merge: branch `i1/ingestion-quality` → pull request → `main`.
+### 6.5 Item 8 decision (2026-10-23) — not now, written down
+
+Measured over the cached 10-Ks: the 14 whose "Item 8" the heading pass finds would add
+**665 chunks** (+34% on the 1,942 kept from 10-Ks). DE, JPM and NVDA would need new
+caption-located extraction, the same kind of code this step just had to fix. With the
+10-Q statements, about **2,500 chunks, +35% of the index**. No test question points to
+Item 8.
+
+You chose **not now**: the statement tables are numbers the numbers lane already owns,
+and a +35% index right before the baseline freeze would move every score with nothing to
+justify it. Recorded in **ADR-0023**, listed in `future_scope.md`, to be measured in L2.
+
+### 6.6 Done — checked 2026-10-23
+- `make check`: lint clean, 107 unit tests; 37 integration tests (144 total).
+- Gate 2: check 4b PASS; red only on the 4 human/key items (spot-checks, prices, U13,
+  JNJ countersign). Gates 0, 1, 4, 5 green; gate 3 red only on human items.
+- Ingestion LLD §4 now describes the caption fallback, its three I1 rules, and the audit;
+  HLD §8 lists the Item 8 difference; roadmap lists I1.

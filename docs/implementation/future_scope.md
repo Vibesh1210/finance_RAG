@@ -18,6 +18,7 @@ Original design sections (`§`) are in `archive/design_us.md`; original phases i
 | **Price answers** | `price()` template, split-adjusted, NVDA split probe | No Tiingo key | Key added (part of M0 sign-off) | §3.5, §9 probe 3 |
 | **"As reported then vs now" template** | One answer showing original and restated values side by side | Store supports it; no answer template | A restatement question in the golden bank | §4.2, phase 8 |
 | **LLM router** | Replace rules with a classifier behind `RouteDecision` | Rules scored 60/60 on gate-derived labels | Real questions show misroutes the rules can't fix | ADR-0014 |
+| **Financial-statement notes** | Chunk 10-K Item 8 and 10-Q Part I Item 1 (accounting policies, litigation, debt terms, segment notes) | ~2,500 more chunks (+35%), caption extraction for DE/JPM/NVDA, no golden question needs it, baselines about to freeze | L2: measure whether notes help or crowd out | ADR-0023, §3 |
 | **IR prepared-remarks manifest** | Fetch CFO commentary PDFs/HTML from a curated URL list | Best-effort, non-gating | Narrative answers lack management commentary | U5 |
 
 ## B. Cut phases (larger; ADR-0015)

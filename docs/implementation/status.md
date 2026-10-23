@@ -1,17 +1,17 @@
 # Status — where the project is right now
 
 State only; never an authority on design or plan. Updated at every step change and
-whenever a blocker changes (ADR-0007). Last updated: **2026-09-28**.
+whenever a blocker changes (ADR-0007). Last updated: **2026-10-23**.
 
 ## The steps
 
 | # | Step | What it is | Status |
 |---|---|---|---|
-| — | **M0** (phases 0–5) | The first working version: data, search, numbers, answering | ✅ built; gates 0, 1, 4, 5 green; 2 at 5/9, 3 at 4/5 (human items) |
+| — | **M0** (phases 0–5) | The first working version: data, search, numbers, answering | ✅ built; gates 0, 1, 4, 5 green; 2 at 6/10, 3 at 4/5 (human items) |
 | 1 | **M0 sign-off** | You check the answer key against the filings; Tiingo key; freeze baselines; tag `v0.1.0` | ⏳ 0 / 159 checklist items ticked |
-| — | **E1** — branches, pull requests, four-job CI | Engineering foundation (ADR-0021) | ▶ **in progress** — branch `e1/engineering-foundation` |
-| — | **I1** — ingestion quality (section boundaries) | Fix JPM/DE/XOM section boundaries; audit every filing | ▶ fix + rebuild done on branch `i1/ingestion-quality`; merge pending |
-| — | **B1** — answer-path fixes | The defects listed under "Known correctness bugs" | ⏳ after E1, before L1 |
+| — | **E1** — branches, pull requests, four-job CI | Engineering foundation (ADR-0021) | ✅ merged (PR #1, #2); two leftovers parked by you (below) |
+| — | **I1** — ingestion quality (section boundaries) | Fix JPM/DE/XOM section boundaries; audit every filing | ✅ done (ADR-0023: Item 8 notes deferred); pull request from `i1/ingestion-quality` awaiting merge |
+| — | **B1** — answer-path fixes | The defects listed under "Known correctness bugs" | ⏳ **next** — after I1 merges, before L1 |
 | 2 | Showcase 1 — README | Front page with real numbers | ⏳ after sign-off |
 | 3 | **L1** — observability, cost, answer grading | Trace per question; quality + cost report; LLM judge for prose | ⏳ after B1 (in parallel with sign-off; scores stay provisional until then) |
 | — | E2 — evaluation gates in CI | Frozen snapshot (DVC) so gates 3–5 run on pull requests | ⏳ after sign-off |
@@ -27,7 +27,7 @@ Plan and specs: [roadmap.md](roadmap.md). What M0 contains: [completed/m0_phases
 ## What's loaded
 
 389 filings (350 downloaded, 39 metadata-only baselines) · 41,175 facts · 405 restatement
-links · 100 fiscal-calendar rows · 7,033 chunks, all embedded · prices: none ·
+links · 100 fiscal-calendar rows · 7,037 chunks, all embedded · prices: none ·
 press-release (U13) rows: 63 staged (AAPL, CAT, COST), 0 loaded.
 
 ## Scores (provisional — answer key not yet human-checked; do not quote)
@@ -45,7 +45,7 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
 - Tiingo key in `.env` (gate 2 check 5)
 - Review the metric registry; confirm the golden bank
 
-**Known correctness bugs (found 2026-09-27; fix as a small step after E1, before L1):**
+**Known correctness bugs (found 2026-09-27; fixed in B1, before L1):**
 - **Margin rendered as dollars, uncited.** "What was Apple's gross margin for fiscal year
   2025?" routes to the numbers lane; `derived_margin` returns a ratio (0.469…), which
   `_as_reported` formats as `$0 million`, and the answer carries no citation (derived
@@ -60,12 +60,17 @@ retrieval recall@10: fused 0.71, dense 0.63, sparse 0.15.
   leg abstains still returns status `answered`.
 
 **Engineering housekeeping (mine):**
-- 2026-09-28: 7,037 chunks (I1 rebuild); 144 tests pass; gates 0, 1, 4, 5 green; 2 and 3 red on human items only.
+- 2026-10-23: 144 tests pass (107 unit, 37 integration); gate 2 check 4b passes; gates 2 and 3 red on human items only.
 - CI: E1 merged (PR #1, #2); four jobs green on `main`. Parked by you: the `protect-main`
   ruleset + squash-only setting, and moving the E1 plan to `completed/`. Gates 2–5 join CI in E2.
 - U13 extraction covers only 3 of 10 companies (free-tier quota).
 
 ## Recent changes
+
+- **2026-10-23** — I1 finished: Item 8 (financial-statement notes) measured at ~2,500 more
+  chunks (+35%); you chose not now — ADR-0023, future scope, revisit in L2. Ingestion LLD,
+  HLD §8 and the roadmap updated; I1 plan moved to `completed/`. Project Explorer Phase 1
+  (frontend) is half-built and uncommitted; to move to its own branch.
 
 - **2026-09-28** — I1: caption-fallback section boundaries fixed (11 filings rebuilt: JPM MD&A
   now complete, DE/JPM runaway "Item 7A" gone, XOM contents list removed); new section audit
