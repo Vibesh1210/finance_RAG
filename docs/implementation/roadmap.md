@@ -15,6 +15,7 @@ built today: `docs/production/`. Original design intent (the `§` numbers):
 |---|---|---|
 | **Now — M0 sign-off** | Verification checklist (`docs/implementation/m0_signoff_checklist.md`) + Tiingo key | Golden bank frozen, baselines recorded, `v0.1.0` tagged |
 | **E1** Branches + CI | Pull-request workflow; four-job CI (lint, unit, integration, secrets); `main` protected | A pull request shows four green checks; a red one blocks merging |
+| **I1** Ingestion quality | Fix the caption-fallback section boundaries (JPM, DE, XOM); audit every filing; rebuild only the affected filings (ADR-0023) | Gate 2 check 4b passes on every 10-K/10-Q |
 | **B1** Answer-path fixes | Fix the defects in `docs/production/lld/answering.md` §6 (margin as "$0 million", "growth" answered as revenue, year-to-date under a quarter label, …) | Each defect has a failing test first, now green |
 | **Showcase 1** README | Rewrite `README.md`: the problem, a diagram, M0 results, key design choices, how to run | A stranger understands the project in ~2 minutes without running it |
 | **L1** Observability + cost + answer grading | A trace per question; a quality-and-cost report; an LLM judge for text answers, checked against hand-graded answers | Report shows quality (incl. answer faithfulness) *and* time/tokens/cost per stage |

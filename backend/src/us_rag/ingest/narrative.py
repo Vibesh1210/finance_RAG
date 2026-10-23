@@ -156,28 +156,56 @@ _MARKET_RISK_CAPTION = re.compile(
     re.IGNORECASE,
 )
 _STATEMENTS_CAPTION = re.compile(
-    r"^(financial statements and supplementary data"
+    r"^(financial statements and supplementary data\.?"
     r"|index to (the )?financial statements.{0,40}"
     r"|report of independent registered public accounting firm.{0,40}"
-    r"|consolidated statements? of (income|operations|earnings)\b.{0,60})$",
+    r"|consolidated statements? of (income|operations|earnings)\b.{0,60}"
+    r"|statements? of consolidated (income|operations|earnings)\b.{0,60})$",
     re.IGNORECASE,
 )
 
 
-def _caption_section(
-    blocks: list[Block], start: re.Pattern, ends: list[re.Pattern], floor: int
-) -> list[str] | None:
-    def is_caption(block: Block, pattern: re.Pattern) -> bool:
-        return not block.linkish and len(block.text) <= 260 and bool(pattern.match(block.text))
+# a contents/index row is followed by a link or a page reference ("46", "133-142", "112–117")
+_PAGE_REF = re.compile(r"^\(?\d{1,3}(\s*[-–]\s*\d{1,3})?\)?$")
 
-    for index, block in enumerate(blocks):
-        if not is_caption(block, start):
+
+def _is_index_row(blocks: list[Block], index: int) -> bool:
+    """True when blocks[index] is an entry in (or the title row of) a table of contents or
+    page index rather than a real caption: one of the next two non-empty blocks is a link
+    or a page reference. (I1, 2026-09-27: JPM's contents table and risk index, and XOM's
+    Financial Section contents table, were taken as section starts.)"""
+    following = [b for b in blocks[index + 1 : index + 6] if b.text.strip("\u200b ")][:2]
+    return any(b.linkish or _PAGE_REF.match(b.text) for b in following)
+
+
+def _caption_section(
+    blocks: list[Block],
+    start: re.Pattern,
+    ends: list[re.Pattern],
+    floor: int,
+    stops: set[int] | None = None,
+) -> list[str] | None:
+    """Section found by its CAPTION. It ends at the first end caption OR the next Item
+    heading already detected (`stops`), whichever comes first — a caption section never
+    runs past a heading the Item pass has seen (I1: DE's Item 7A ran to end of document)."""
+
+    def is_caption(index: int, pattern: re.Pattern) -> bool:
+        block = blocks[index]
+        return (
+            not block.linkish
+            and len(block.text) <= 260
+            and bool(pattern.match(block.text))
+            and not _is_index_row(blocks, index)
+        )
+
+    for index in range(len(blocks)):
+        if not is_caption(index, start):
             continue
         end_index = next(
             (
                 j
                 for j in range(index + 1, len(blocks))
-                if any(is_caption(blocks[j], p) for p in ends)
+                if j in (stops or ()) or any(is_caption(j, p) for p in ends)
             ),
             len(blocks),
         )
@@ -203,14 +231,15 @@ def extract_10k_sections(blocks: list[Block]) -> dict[str, list[str]]:
             if _accept(body, 500):
                 sections[label] = [b.text for b in body]
                 break
+    stops = {h.index for h in headings}
     if "Item 7" not in sections:
         body = _caption_section(
-            blocks, _MDNA_CAPTION, [_MARKET_RISK_CAPTION, _STATEMENTS_CAPTION], 500
+            blocks, _MDNA_CAPTION, [_MARKET_RISK_CAPTION, _STATEMENTS_CAPTION], 500, stops
         )
         if body:
             sections["Item 7"] = body
     if "Item 7A" not in sections:
-        body = _caption_section(blocks, _MARKET_RISK_CAPTION, [_STATEMENTS_CAPTION], 500)
+        body = _caption_section(blocks, _MARKET_RISK_CAPTION, [_STATEMENTS_CAPTION], 500, stops)
         if body:
             sections["Item 7A"] = body
     return sections
@@ -233,7 +262,8 @@ def extract_10q_sections(blocks: list[Block]) -> dict[str, list[str]]:
                 break
     if "Part I Item 2 (MD&A)" not in sections:  # P-US-2: JPM cross-references it
         body = _caption_section(
-            blocks, _MDNA_CAPTION, [_MARKET_RISK_CAPTION, _STATEMENTS_CAPTION], 500
+            blocks, _MDNA_CAPTION, [_MARKET_RISK_CAPTION, _STATEMENTS_CAPTION], 500,
+            {h.index for h in headings},
         )
         if body:
             sections["Part I Item 2 (MD&A)"] = body

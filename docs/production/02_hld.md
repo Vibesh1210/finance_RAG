@@ -175,6 +175,7 @@ intent. The table below is the complete list of material differences in what is 
 | Text answers | LLM writes the answer | Off by default: returns pointers to the passages; Gemini is opt-in | Offline gates (fixtures-only rule) |
 | `hybrid` route | Runs both lanes and merges | Goes to the text lane only | Not yet built |
 | Segment numbers | Exact from XBRL dimensions (§3.2) | Not loaded; segment questions go to text search | ADR-0013 |
+| Sections extracted | Items 1, 1A, 7, 7A **and Item 8 notes** (§3) | Items 1, 1A, 7, 7A only; financial-statement notes not chunked | ADR-0023 |
 | Preliminary (8-K) figures | Loaded as `preliminary` rows | 63 rows staged (AAPL, CAT, COST); none loaded until human verification | U13, ADR-0005 |
 | Prices / split adjustment | `price()` template (§6.2) | Tables empty; price questions refused | No Tiingo key |
 | Chunk size | ≤ ~800 tokens (§4.5) | Token count is estimated (chars/4); real chunks reach 1,634 tokens | Measured in L2 (ADR-0016) |
